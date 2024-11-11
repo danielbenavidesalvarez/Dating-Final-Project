@@ -1,4 +1,5 @@
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Main {
@@ -14,7 +15,6 @@ public class Main {
                 System.out.println("1. Create Profile");
                 System.out.println("2. Log in to Profile");
                 System.out.println("3. Exit");
-                System.out.print("Choose an option: ");
                 int option = scanner.nextInt();
                 scanner.nextLine();
 
@@ -25,7 +25,7 @@ public class Main {
                         System.out.print("Enter age: ");
                         int age = scanner.nextInt();
                         scanner.nextLine();
-                        System.out.print("Enter your gender (Male/Female/Other): ");
+                        System.out.print("Enter gender (Male/Female/Other): ");
                         String gender = scanner.nextLine();
                         System.out.print("Enter location: ");
                         String location = scanner.nextLine();
@@ -38,7 +38,7 @@ public class Main {
                         break;
 
                     case 2:
-                        System.out.print("Enter your username to log in: ");
+                        System.out.print("Enter username to log in: ");
                         String loginUsername = scanner.nextLine();
                         currentUser = database.findUserByUsername(loginUsername);
 
@@ -51,7 +51,6 @@ public class Main {
                         break;
 
                     case 3:
-                        System.out.println("Exiting...");
                         System.exit(0);
                         break;
 
@@ -60,48 +59,24 @@ public class Main {
                 }
             } else {
                 System.out.println("\nWelcome, " + currentUser.getUsername());
-                System.out.println("1. View All Matches");
-                System.out.println("2. Filter Matches");
-                System.out.println("3. Like/Dislike Profiles");
-                System.out.println("4. View Mutual Likes");
-                System.out.println("5. Log Out");
+                System.out.println("1. View Mutual Likes");
+                System.out.println("2. Like/Dislike Profiles");
+                System.out.println("3. Messages");
+                System.out.println("4. Log Out");
                 System.out.print("Choose an option: ");
                 int option = scanner.nextInt();
                 scanner.nextLine();
 
                 switch (option) {
-                    case 1:
-                        List<User> users = database.getUsers();
-                        System.out.println("\nAll Matches:");
-                        for (User u : users) {
-                            if (!u.getUsername().equalsIgnoreCase(currentUser.getUsername())) {
-                                System.out.println(u);
-                            }
+                    case 1: // View Mutual Likes
+                        System.out.println("\nYour Mutual Likes:");
+                        for (String mutualLike : currentUser.getMutualLikes()) {
+                            System.out.println("You matched with " + mutualLike);
                         }
+                        currentUser.clearNewMatchesNotification();
                         break;
 
-                    case 2:
-                        // Filtering Matches
-                        System.out.print("Enter minimum age: ");
-                        int minAge = scanner.nextInt();
-                        System.out.print("Enter maximum age: ");
-                        int maxAge = scanner.nextInt();
-                        scanner.nextLine(); // Consume newline
-                        System.out.print("Enter location: ");
-                        String filterLocation = scanner.nextLine();
-
-                        List<User> filteredUsers = database.filterUsers(minAge, maxAge, filterLocation, currentUser.getGender(), currentUser);
-                        System.out.println("\nFiltered Matches:");
-                        if (filteredUsers.isEmpty()) {
-                            System.out.println("No matches found with the given criteria.");
-                        } else {
-                            for (User u : filteredUsers) {
-                                System.out.println(u);
-                            }
-                        }
-                        break;
-
-                    case 3:
+                    case 2: // Like/Dislike Profiles
                         List<User> allUsers = database.getUsers();
                         System.out.println("\nLike/Dislike Profiles:");
                         for (User user : allUsers) {
@@ -121,17 +96,57 @@ public class Main {
                         }
                         break;
 
-                    case 4:
-                        System.out.println("\nYour Mutual Likes:");
-                        for (String mutualLike : currentUser.getMutualLikes()) {
-                            System.out.println("You matched with " + mutualLike);
+                    case 3: // Messages Menu
+                        System.out.println("\nMessages:");
+                        System.out.println("1. Send Message");
+                        System.out.println("2. View Messages");
+                        System.out.print("Choose an option: ");
+                        int messageOption = scanner.nextInt();
+                        scanner.nextLine();
+
+                        if (messageOption == 1) { // Send Message
+                            List<String> mutualLikes = new ArrayList<>(currentUser.getMutualLikes());
+                            if (mutualLikes.isEmpty()) {
+                                System.out.println("No users available to message.");
+                            } else {
+                                System.out.println("\nSelect a user to message:");
+                                for (int i = 0; i < mutualLikes.size(); i++) {
+                                    System.out.println((i + 1) + ". " + mutualLikes.get(i));
+                                }
+                                System.out.print("Choose a number: ");
+                                int userChoice = scanner.nextInt();
+                                scanner.nextLine();
+
+                                if (userChoice > 0 && userChoice <= mutualLikes.size()) {
+                                    String receiver = mutualLikes.get(userChoice - 1);
+                                    System.out.print("Enter your message: ");
+                                    String content = scanner.nextLine();
+                                    currentUser.sendMessage(receiver, content);
+                                    System.out.println("Message sent to " + receiver);
+                                } else {
+                                    System.out.println("Invalid choice.");
+                                }
+                            }
+                        } else if (messageOption == 2) { // View All Received Messages
+                            List<Message> receivedMessages = currentUser.getAllReceivedMessages();
+                            if (receivedMessages.isEmpty()) {
+                                System.out.println("No messages at this time.");
+                            } else {
+                                System.out.println("\nAll Received Messages:");
+                                for (Message message : receivedMessages) {
+                                    System.out.println(message);
+                                }
+                            }
+                            currentUser.clearNewMessagesNotification();
+                        } else {
+                            System.out.println("Invalid option.");
                         }
                         break;
 
-                    case 5:
-                        System.out.println("Logging out...");
+                    case 4: // Log Out
                         loggedIn = false;
                         currentUser = null;
+                        System.out.println("Logged out successfully.");
                         break;
 
                     default:

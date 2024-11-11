@@ -1,5 +1,9 @@
-import java.util.HashSet;
+import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.Set;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 
 public class User {
     private String username;
@@ -7,8 +11,11 @@ public class User {
     private String gender;
     private String location;
     private String interests;
-    private Set<String> likes; // Set of usernames the user has liked
-    private Set<String> mutualLikes; // Set of mutual likes
+    private Set<String> likes;
+    private Set<String> mutualLikes;
+    private Map<String, List<Message>> conversations;
+    private boolean hasNewMessages;
+    private boolean hasNewMatches;
 
     public User(String username, int age, String gender, String location, String interests) {
         this.username = username;
@@ -18,28 +25,47 @@ public class User {
         this.interests = interests;
         this.likes = new HashSet<>();
         this.mutualLikes = new HashSet<>();
+        this.conversations = new HashMap<>();
+        this.hasNewMessages = false;
+        this.hasNewMatches = false;
     }
 
     public String getUsername() { return username; }
-    public int getAge() { return age; }
-    public String getGender() { return gender; }
-    public String getLocation() { return location; }
-    public String getInterests() { return interests; }
-
-    public Set<String> getLikes() { return likes; }
     public Set<String> getMutualLikes() { return mutualLikes; }
 
-    public void likeUser(String username) {
-        likes.add(username);
-    }
+    // New Method to get the list of likes
+    public Set<String> getLikes() { return likes; }
+
+    public void likeUser(String username) { likes.add(username); }
 
     public void addMutualLike(String username) {
         mutualLikes.add(username);
+        hasNewMatches = true;
+        if (!conversations.containsKey(username)) {
+            conversations.put(username, new ArrayList<>());
+        }
     }
 
-    @Override
-    public String toString() {
-        return "Username: " + username + ", Age: " + age + ", Gender: " + gender +
-                ", Location: " + location + ", Interests: " + interests;
+    public void sendMessage(String receiver, String content) {
+        if (conversations.containsKey(receiver)) {
+            Message message = new Message(this.username, receiver, content);
+            conversations.get(receiver).add(message);
+            hasNewMessages = true;
+        }
     }
+
+    public List<Message> getAllReceivedMessages() {
+        List<Message> receivedMessages = new ArrayList<>();
+        for (List<Message> conversation : conversations.values()) {
+            for (Message message : conversation) {
+                if (message.getReceiver().equals(this.username)) {
+                    receivedMessages.add(message);
+                }
+            }
+        }
+        return receivedMessages;
+    }
+
+    public void clearNewMessagesNotification() { hasNewMessages = false; }
+    public void clearNewMatchesNotification() { hasNewMatches = false; }
 }

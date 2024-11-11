@@ -8,13 +8,8 @@ public class MockDatabase {
         this.users = new ArrayList<>();
     }
 
-    public void addUser(User user) {
-        users.add(user);
-    }
-
-    public List<User> getUsers() {
-        return users;
-    }
+    public void addUser(User user) { users.add(user); }
+    public List<User> getUsers() { return users; }
 
     public User findUserByUsername(String username) {
         for (User user : users) {
@@ -25,37 +20,11 @@ public class MockDatabase {
         return null;
     }
 
-    // Method to filter users based on age range, location, and gender preference
-    public List<User> filterUsers(int minAge, int maxAge, String location, String userGender, User currentUser) {
-        List<User> filteredUsers = new ArrayList<>();
-        for (User user : users) {
-            if (currentUser != null && user.getUsername().equalsIgnoreCase(currentUser.getUsername())) {
-                continue;
-            }
-
-            boolean matchesLocation = user.getLocation().equalsIgnoreCase(location);
-            boolean matchesAge = user.getAge() >= minAge && user.getAge() <= maxAge;
-
-            boolean matchesGender = false;
-            if (userGender.equalsIgnoreCase("Male")) {
-                matchesGender = user.getGender().equalsIgnoreCase("Female");
-            } else if (userGender.equalsIgnoreCase("Female")) {
-                matchesGender = user.getGender().equalsIgnoreCase("Male");
-            } else {
-                matchesGender = user.getGender().equalsIgnoreCase("Male") ||
-                        user.getGender().equalsIgnoreCase("Female");
-            }
-
-            if (matchesAge && matchesLocation && matchesGender) {
-                filteredUsers.add(user);
-            }
-        }
-        return filteredUsers;
-    }
-
-    // Method to check for mutual likes
-    public boolean isMutualLike(User currentUser, String likedUsername) {
-        User likedUser = findUserByUsername(likedUsername);
-        return likedUser != null && likedUser.getLikes().contains(currentUser.getUsername());
+    // New Method: Check if two users have mutually liked each other
+    public boolean isMutualLike(User user1, String username2) {
+        User user2 = findUserByUsername(username2);
+        if (user2 == null) return false;
+        return user1.getLikes().contains(username2) && user2.getLikes().contains(user1.getUsername());
     }
 }
+
