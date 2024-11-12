@@ -29,5 +29,5 @@ John just left his hometown of Valencia, Spain to attend the University of Toron
 
 Use case 4:
 
-Julia is in her 2nd year of university and, after living on-campus her first year, she is now renting a studio apartment because she likes her personal space. However, after the first 2 months, she feels like she doesn’t get to meet people outside of classes anymore and would like to make friends to hang out with after classes. She enjoys playing frisbee, spikeball, and wine nights. Our app will help her connect with other people looking to make friends.
+Jennifer is in her 2nd year of university and, after living on-campus her first year, she is now renting a studio apartment because she likes her personal space. However, after the first 2 months, she feels like she doesn’t get to meet people outside of classes anymore and would like to make friends to hang out with after classes. She enjoys playing frisbee, spikeball, and wine nights. Our app will help her connect with other people looking to make friends.
 
