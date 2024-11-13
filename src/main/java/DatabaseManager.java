@@ -4,7 +4,7 @@ public class DatabaseManager {
     private static final String DB_URL = "jdbc:sqlite:datingapp.db";
     private Connection conn;
 
-    // Establish connection to the database
+    // Constructor to establish a connection and create tables
     public DatabaseManager() {
         connect();
         createTables();
@@ -21,7 +21,7 @@ public class DatabaseManager {
         }
     }
 
-    // Create tables if they don't exist
+    // Method to create tables if they don't exist
     private void createTables() {
         String createUsersTable = "CREATE TABLE IF NOT EXISTS users (" +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT," +
@@ -48,8 +48,13 @@ public class DatabaseManager {
         }
     }
 
-    // Method to insert a user into the database
+    // Method to add a user only if they don't already exist
     public void addUser(String username, int age, String gender, String location) {
+        if (userExists(username)) {
+            System.out.println("User already exists: " + username);
+            return;
+        }
+
         String sql = "INSERT INTO users (username, age, gender, location) VALUES (?, ?, ?, ?)";
         try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, username);
@@ -61,6 +66,19 @@ public class DatabaseManager {
         } catch (SQLException e) {
             System.err.println("Error adding user: " + e.getMessage());
         }
+    }
+
+    // Method to check if a user already exists in the database
+    private boolean userExists(String username) {
+        String sql = "SELECT 1 FROM users WHERE username = ?";
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, username);
+            ResultSet rs = pstmt.executeQuery();
+            return rs.next(); // Returns true if a result is found
+        } catch (SQLException e) {
+            System.err.println("Error checking user existence: " + e.getMessage());
+        }
+        return false;
     }
 
     // Method to retrieve all users
@@ -79,7 +97,7 @@ public class DatabaseManager {
         }
     }
 
-    // Close the connection when done
+    // Close the database connection
     public void close() {
         try {
             if (conn != null) conn.close();
@@ -90,6 +108,8 @@ public class DatabaseManager {
 
     public static void main(String[] args) {
         DatabaseManager dbManager = new DatabaseManager();
+
+        // Add users only if they don't already exist
         dbManager.addUser("luiscal", 21, "Male", "Toronto");
         dbManager.addUser("danny", 24, "Male", "Vancouver");
 
