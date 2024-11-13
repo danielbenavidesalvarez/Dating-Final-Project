@@ -98,13 +98,13 @@ public class Main {
 
                     case 3: // Messages Menu
                         System.out.println("\nMessages:");
-                        System.out.println("1. Send Message");
+                        System.out.println("1. Send main.java.Message");
                         System.out.println("2. View Messages");
                         System.out.print("Choose an option: ");
                         int messageOption = scanner.nextInt();
                         scanner.nextLine();
 
-                        if (messageOption == 1) { // Send Message
+                        if (messageOption == 1) { // Send main.java.Message
                             List<String> mutualLikes = new ArrayList<>(currentUser.getMutualLikes());
                             if (mutualLikes.isEmpty()) {
                                 System.out.println("No users available to message.");
@@ -122,7 +122,7 @@ public class Main {
                                     System.out.print("Enter your message: ");
                                     String content = scanner.nextLine();
                                     currentUser.sendMessage(receiver, content);
-                                    System.out.println("Message sent to " + receiver);
+                                    System.out.println("main.java.Message sent to " + receiver);
                                 } else {
                                     System.out.println("Invalid choice.");
                                 }

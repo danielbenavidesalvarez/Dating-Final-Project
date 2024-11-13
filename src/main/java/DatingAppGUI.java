@@ -1,6 +1,5 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -67,7 +66,7 @@ public class DatingAppGUI extends JFrame {
         int choice = JOptionPane.showOptionDialog(
                 this,
                 "Choose an option",
-                "User Menu",
+                "main.java.java.User Menu",
                 JOptionPane.DEFAULT_OPTION,
                 JOptionPane.INFORMATION_MESSAGE,
                 null,
@@ -113,7 +112,7 @@ public class DatingAppGUI extends JFrame {
     }
 
     private void messageMenu() {
-        String[] options = {"Send Message", "View Messages"};
+        String[] options = {"Send main.java.Message", "View Messages"};
         int choice = JOptionPane.showOptionDialog(
                 this,
                 "Choose an option",
@@ -137,11 +136,11 @@ public class DatingAppGUI extends JFrame {
         if (mutualLikes.isEmpty()) {
             JOptionPane.showMessageDialog(this, "No users available to message.");
         } else {
-            String receiver = (String) JOptionPane.showInputDialog(this, "Select a user to message:", "Send Message", JOptionPane.QUESTION_MESSAGE, null, mutualLikes.toArray(), mutualLikes.get(0));
+            String receiver = (String) JOptionPane.showInputDialog(this, "Select a user to message:", "Send main.java.Message", JOptionPane.QUESTION_MESSAGE, null, mutualLikes.toArray(), mutualLikes.get(0));
             if (receiver != null) {
                 String content = JOptionPane.showInputDialog(this, "Enter your message:");
                 currentUser.sendMessage(receiver, content);
-                JOptionPane.showMessageDialog(this, "Message sent to " + receiver);
+                JOptionPane.showMessageDialog(this, "main.java.Message sent to " + receiver);
             }
         }
     }
