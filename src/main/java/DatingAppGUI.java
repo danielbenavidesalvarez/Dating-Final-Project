@@ -1,5 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,10 +9,17 @@ import java.util.List;
 public class DatingAppGUI extends JFrame {
     private MockDatabase database;
     private User currentUser;
-
+    private String[] availableGenders = {"Male", "Female", "Other"};
+    private String[] availableInterests = {"Technology", "Sports", "Music", "Art", "Travel", "Cooking"};
+    private List<Integer> ageList = new ArrayList<>();
+    private Object[] ageArray;
     public DatingAppGUI() {
         database = new MockDatabase();
         initialize();
+        for (int i = 18; i <= 100; i++){
+            ageList.add(i);
+        }
+        ageArray = ageList.toArray();
     }
 
     private void initialize() {
@@ -39,12 +48,71 @@ public class DatingAppGUI extends JFrame {
 
     private void createProfile() {
         String username = JOptionPane.showInputDialog(this, "Enter username:");
-        int age = Integer.parseInt(JOptionPane.showInputDialog(this, "Enter age:"));
-        String gender = JOptionPane.showInputDialog(this, "Enter gender (Male/Female/Other):");
-        String location = JOptionPane.showInputDialog(this, "Enter location:");
-        String interests = JOptionPane.showInputDialog(this, "Enter interests:");
+        int age = 0;
+        while (true){
+            int ageSelected = (int) JOptionPane.showInputDialog(
+                    this,
+                    "Enter age",
+                    "Select age",
+                    JOptionPane.QUESTION_MESSAGE ,
+                    null,
+                    ageArray,
+                    ageList.get(0));
 
-        currentUser = new User(username, age, gender, location, interests);
+            if (ageSelected != 0){
+                age = ageSelected;
+            }
+            int changeAge = JOptionPane.showConfirmDialog(this,
+                    "Change Age",
+                    "Age",
+                    JOptionPane.YES_NO_OPTION);
+            if (changeAge == JOptionPane.NO_OPTION) {
+                break;
+            }
+        }
+
+        String gender;
+        while (true) {
+            String genderSelected = (String) JOptionPane.showInputDialog(this,
+                    "Enter gender:",
+                    "Select Gender",
+                    JOptionPane.QUESTION_MESSAGE,
+                    null,
+                    availableGenders,
+                    availableGenders[0]);
+            if (genderSelected != null) {
+                gender = genderSelected;
+                break;
+            }
+        }
+        String location = JOptionPane.showInputDialog(this, "Enter location:");
+        // Dropdown-based interest selection
+
+        List<String> interestList = new ArrayList<>();
+
+        while (true) {
+            String selectedInterest = (String) JOptionPane.showInputDialog(
+                    this,
+                    "Select an interest:",
+                    "Choose Interest",
+                    JOptionPane.QUESTION_MESSAGE,
+                    null,
+                    availableInterests,
+                    availableInterests[0]
+            );
+
+            if (selectedInterest != null && !interestList.contains(selectedInterest)) {
+                interestList.add(selectedInterest);
+            }
+
+            int addMore = JOptionPane.showConfirmDialog(this, "Add another interest?", "Interests", JOptionPane.YES_NO_OPTION);
+            if (addMore == JOptionPane.NO_OPTION) {
+                break;
+            }
+        }
+
+
+        currentUser = new User(username, age, gender, location, interestList);
         database.addUser(currentUser);
         JOptionPane.showMessageDialog(this, "Profile created successfully!");
     }
