@@ -1,16 +1,16 @@
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DatabaseManager {
     private static final String DB_URL = "jdbc:sqlite:datingapp.db";
     private Connection conn;
 
-    // Constructor to establish a connection and create tables
     public DatabaseManager() {
         connect();
         createTables();
     }
 
-    // Method to connect to the database
     private void connect() {
         try {
             Class.forName("org.sqlite.JDBC");
@@ -21,7 +21,6 @@ public class DatabaseManager {
         }
     }
 
-    // Method to create tables if they don't exist
     private void createTables() {
         String createUsersTable = "CREATE TABLE IF NOT EXISTS users (" +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT," +
@@ -48,73 +47,104 @@ public class DatabaseManager {
         }
     }
 
-    // Method to add a user only if they don't already exist
-    public void addUser(String username, int age, String gender, String location) {
-        if (userExists(username)) {
-            System.out.println("User already exists: " + username);
-            return;
-        }
-
+    public boolean addUser(User user) {
         String sql = "INSERT INTO users (username, age, gender, location) VALUES (?, ?, ?, ?)";
         try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setString(1, username);
-            pstmt.setInt(2, age);
-            pstmt.setString(3, gender);
-            pstmt.setString(4, location);
+            pstmt.setString(1, user.getUsername());
+            pstmt.setInt(2, user.getAge());
+            pstmt.setString(3, user.getGender());
+            pstmt.setString(4, user.getLocation());
             pstmt.executeUpdate();
-            System.out.println("User added: " + username);
+            System.out.println("User added: " + user.getUsername());
+            return true;
         } catch (SQLException e) {
             System.err.println("Error adding user: " + e.getMessage());
+            return false;
         }
     }
 
-    // Method to check if a user already exists in the database
-    private boolean userExists(String username) {
-        String sql = "SELECT 1 FROM users WHERE username = ?";
+    public User findUserByUsername(String username) {
+        String sql = "SELECT * FROM users WHERE username = ?";
         try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, username);
             ResultSet rs = pstmt.executeQuery();
-            return rs.next(); // Returns true if a result is found
+            if (rs.next()) {
+                return new User(
+                        rs.getString("username"),
+                        rs.getInt("age"),
+                        rs.getString("gender"),
+                        rs.getString("location"),
+                        new ArrayList<>()
+                );
+            }
         } catch (SQLException e) {
-            System.err.println("Error checking user existence: " + e.getMessage());
+            System.err.println("Error finding user: " + e.getMessage());
         }
-        return false;
+        return null;
     }
 
-    // Method to retrieve all users
-    public void getAllUsers() {
+    public List<User> getAllUsers() {
+        List<User> users = new ArrayList<>();
         String sql = "SELECT * FROM users";
         try (Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
             while (rs.next()) {
-                System.out.println("Username: " + rs.getString("username") +
-                        ", Age: " + rs.getInt("age") +
-                        ", Gender: " + rs.getString("gender") +
-                        ", Location: " + rs.getString("location"));
+                users.add(new User(
+                        rs.getString("username"),
+                        rs.getInt("age"),
+                        rs.getString("gender"),
+                        rs.getString("location"),
+                        new ArrayList<>()
+                ));
             }
         } catch (SQLException e) {
             System.err.println("Error retrieving users: " + e.getMessage());
         }
+        return users;
     }
 
-    // Close the database connection
+    public boolean isMutualLike(String currentUser, String otherUsername) {
+        return findUserByUsername(currentUser).getMutualLikes().contains(otherUsername);
+    }
+
+    public void sendMessage(String sender, String receiver, String content) {
+        String sql = "INSERT INTO messages (sender, receiver, content) VALUES (?, ?, ?)";
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, sender);
+            pstmt.setString(2, receiver);
+            pstmt.setString(3, content);
+            pstmt.executeUpdate();
+            System.out.println("Message sent from " + sender + " to " + receiver);
+        } catch (SQLException e) {
+            System.err.println("Error sending message: " + e.getMessage());
+        }
+    }
+
+    public List<Message> getMessagesForUser(String username) {
+        List<Message> messages = new ArrayList<>();
+        String sql = "SELECT * FROM messages WHERE receiver = ?";
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, username);
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                messages.add(new Message(
+                        rs.getString("sender"),
+                        rs.getString("receiver"),
+                        rs.getString("content"),
+                        rs.getString("timestamp")
+                ));
+            }
+        } catch (SQLException e) {
+            System.err.println("Error retrieving messages: " + e.getMessage());
+        }
+        return messages;
+    }
+
     public void close() {
         try {
             if (conn != null) conn.close();
         } catch (SQLException e) {
             System.err.println("Error closing connection: " + e.getMessage());
         }
-    }
-
-    public static void main(String[] args) {
-        DatabaseManager dbManager = new DatabaseManager();
-
-        // Add users only if they don't already exist
-        dbManager.addUser("luiscal", 21, "Male", "Toronto");
-        dbManager.addUser("danny", 24, "Male", "Vancouver");
-
-        System.out.println("\nUsers in the database:");
-        dbManager.getAllUsers();
-        dbManager.close();
     }
 }

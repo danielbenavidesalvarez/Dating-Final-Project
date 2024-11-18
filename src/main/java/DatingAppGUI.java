@@ -1,22 +1,20 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class DatingAppGUI extends JFrame {
-    private MockDatabase database;
+    private DatabaseManager database;
     private User currentUser;
     private String[] availableGenders = {"Male", "Female", "Other"};
     private String[] availableInterests = {"Technology", "Sports", "Music", "Art", "Travel", "Cooking"};
     private List<Integer> ageList = new ArrayList<>();
     private Object[] ageArray;
+
     public DatingAppGUI() {
-        database = new MockDatabase();
+        database = new DatabaseManager();
         initialize();
-        for (int i = 18; i <= 100; i++){
+        for (int i = 18; i <= 100; i++) {
             ageList.add(i);
         }
         ageArray = ageList.toArray();
@@ -48,77 +46,47 @@ public class DatingAppGUI extends JFrame {
 
     private void createProfile() {
         String username = JOptionPane.showInputDialog(this, "Enter username:");
-        int age = 0;
-        while (true){
-            int ageSelected = (int) JOptionPane.showInputDialog(
-                    this,
-                    "Enter age",
-                    "Select age",
-                    JOptionPane.QUESTION_MESSAGE ,
-                    null,
-                    ageArray,
-                    ageList.get(0));
+        if (username == null || username.isEmpty()) return;
 
-            if (ageSelected != 0){
-                age = ageSelected;
-            }
-            int changeAge = JOptionPane.showConfirmDialog(this,
-                    "Change Age",
-                    "Age",
-                    JOptionPane.YES_NO_OPTION);
-            if (changeAge == JOptionPane.NO_OPTION) {
-                break;
-            }
-        }
+        int age = (int) JOptionPane.showInputDialog(
+                this, "Enter age:", "Select Age",
+                JOptionPane.QUESTION_MESSAGE, null, ageArray, ageArray[0]);
 
-        String gender;
-        while (true) {
-            String genderSelected = (String) JOptionPane.showInputDialog(this,
-                    "Enter gender:",
-                    "Select Gender",
-                    JOptionPane.QUESTION_MESSAGE,
-                    null,
-                    availableGenders,
-                    availableGenders[0]);
-            if (genderSelected != null) {
-                gender = genderSelected;
-                break;
-            }
-        }
+        String gender = (String) JOptionPane.showInputDialog(
+                this, "Select gender:", "Select Gender",
+                JOptionPane.QUESTION_MESSAGE, null, availableGenders, availableGenders[0]);
+
+        if (gender == null) return;
+
         String location = JOptionPane.showInputDialog(this, "Enter location:");
-        // Dropdown-based interest selection
+        if (location == null || location.isEmpty()) return;
 
         List<String> interestList = new ArrayList<>();
-
         while (true) {
             String selectedInterest = (String) JOptionPane.showInputDialog(
-                    this,
-                    "Select an interest:",
-                    "Choose Interest",
-                    JOptionPane.QUESTION_MESSAGE,
-                    null,
-                    availableInterests,
-                    availableInterests[0]
-            );
+                    this, "Select an interest:", "Choose Interest",
+                    JOptionPane.QUESTION_MESSAGE, null, availableInterests, availableInterests[0]);
 
             if (selectedInterest != null && !interestList.contains(selectedInterest)) {
                 interestList.add(selectedInterest);
             }
 
             int addMore = JOptionPane.showConfirmDialog(this, "Add another interest?", "Interests", JOptionPane.YES_NO_OPTION);
-            if (addMore == JOptionPane.NO_OPTION) {
-                break;
-            }
+            if (addMore == JOptionPane.NO_OPTION) break;
         }
 
-
         currentUser = new User(username, age, gender, location, interestList);
-        database.addUser(currentUser);
-        JOptionPane.showMessageDialog(this, "Profile created successfully!");
+        if (database.addUser(currentUser)) {
+            JOptionPane.showMessageDialog(this, "Profile created successfully!");
+        } else {
+            JOptionPane.showMessageDialog(this, "Username already exists.");
+        }
     }
 
     private void logIn() {
         String username = JOptionPane.showInputDialog(this, "Enter your username:");
+        if (username == null || username.isEmpty()) return;
+
         currentUser = database.findUserByUsername(username);
 
         if (currentUser != null) {
@@ -132,15 +100,9 @@ public class DatingAppGUI extends JFrame {
     private void showUserMenu() {
         String[] options = {"View Mutual Likes", "Like/Dislike Profiles", "Messages", "Log Out"};
         int choice = JOptionPane.showOptionDialog(
-                this,
-                "Choose an option",
-                "main.java.java.User Menu",
-                JOptionPane.DEFAULT_OPTION,
-                JOptionPane.INFORMATION_MESSAGE,
-                null,
-                options,
-                options[0]
-        );
+                this, "Choose an option", "User Menu",
+                JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE,
+                null, options, options[0]);
 
         switch (choice) {
             case 0 -> viewMutualLikes();
@@ -163,13 +125,13 @@ public class DatingAppGUI extends JFrame {
     }
 
     private void likeDislikeProfiles() {
-        List<User> users = database.getUsers();
+        List<User> users = database.getAllUsers();
         for (User user : users) {
             if (!user.getUsername().equals(currentUser.getUsername())) {
                 int response = JOptionPane.showConfirmDialog(this, "Do you like " + user.getUsername() + "?", "Like/Dislike", JOptionPane.YES_NO_OPTION);
                 if (response == JOptionPane.YES_OPTION) {
                     currentUser.likeUser(user.getUsername());
-                    if (database.isMutualLike(currentUser, user.getUsername())) {
+                    if (database.isMutualLike(currentUser.getUsername(), user.getUsername())) {
                         currentUser.addMutualLike(user.getUsername());
                         user.addMutualLike(currentUser.getUsername());
                         JOptionPane.showMessageDialog(this, "It's a match with " + user.getUsername() + "!");
@@ -180,17 +142,11 @@ public class DatingAppGUI extends JFrame {
     }
 
     private void messageMenu() {
-        String[] options = {"Send main.java.Message", "View Messages"};
+        String[] options = {"Send Message", "View Messages"};
         int choice = JOptionPane.showOptionDialog(
-                this,
-                "Choose an option",
-                "Messages",
-                JOptionPane.DEFAULT_OPTION,
-                JOptionPane.INFORMATION_MESSAGE,
-                null,
-                options,
-                options[0]
-        );
+                this, "Choose an option", "Messages",
+                JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE,
+                null, options, options[0]);
 
         if (choice == 0) {
             sendMessage();
@@ -204,17 +160,19 @@ public class DatingAppGUI extends JFrame {
         if (mutualLikes.isEmpty()) {
             JOptionPane.showMessageDialog(this, "No users available to message.");
         } else {
-            String receiver = (String) JOptionPane.showInputDialog(this, "Select a user to message:", "Send main.java.Message", JOptionPane.QUESTION_MESSAGE, null, mutualLikes.toArray(), mutualLikes.get(0));
+            String receiver = (String) JOptionPane.showInputDialog(this, "Select a user to message:", "Send Message", JOptionPane.QUESTION_MESSAGE, null, mutualLikes.toArray(), mutualLikes.get(0));
             if (receiver != null) {
                 String content = JOptionPane.showInputDialog(this, "Enter your message:");
-                currentUser.sendMessage(receiver, content);
-                JOptionPane.showMessageDialog(this, "main.java.Message sent to " + receiver);
+                if (content != null && !content.isEmpty()) {
+                    database.sendMessage(currentUser.getUsername(), receiver, content);
+                    JOptionPane.showMessageDialog(this, "Message sent to " + receiver);
+                }
             }
         }
     }
 
     private void viewMessages() {
-        List<Message> receivedMessages = currentUser.getAllReceivedMessages();
+        List<Message> receivedMessages = database.getMessagesForUser(currentUser.getUsername());
         if (receivedMessages.isEmpty()) {
             JOptionPane.showMessageDialog(this, "No messages at this time.");
         } else {
@@ -233,4 +191,3 @@ public class DatingAppGUI extends JFrame {
         });
     }
 }
-
