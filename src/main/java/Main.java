@@ -29,10 +29,11 @@ public class Main {
                         String gender = scanner.nextLine();
                         System.out.print("Enter location: ");
                         String location = scanner.nextLine();
-                        System.out.print("Enter interests (comma-separated): ");
+                        System.out.print("Enter interests ");
                         String interests = scanner.nextLine();
-
-                        currentUser = new User(username, age, gender, location, interests);
+                        List<String> interestList = new ArrayList<String>();
+                        interestList.add(interests);
+                        currentUser = new User(username, age, gender, location, interestList);
                         database.addUser(currentUser);
                         loggedIn = true;
                         break;

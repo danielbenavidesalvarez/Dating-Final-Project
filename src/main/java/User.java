@@ -10,14 +10,14 @@ public class User {
     private int age;
     private String gender;
     private String location;
-    private String interests;
+    private List<String> interests;
     private Set<String> likes;
     private Set<String> mutualLikes;
     private Map<String, List<Message>> conversations;
     private boolean hasNewMessages;
     private boolean hasNewMatches;
 
-    public User(String username, int age, String gender, String location, String interests) {
+    public User(String username, int age, String gender, String location, List<String> interests) {
         this.username = username;
         this.age = age;
         this.gender = gender;
