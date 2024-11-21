@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "886943656157",
+    "project_id": "csc207-dating-app",
+    "storage_bucket": "csc207-dating-app.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:886943656157:android:c302c9be4d33c5282dd334",
+        "android_client_info": {
+          "package_name": "com.example.datingapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBBnIag5wY2ex5TQWE7d92_e5_SUJ8BN_k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

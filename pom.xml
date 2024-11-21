@@ -12,11 +12,21 @@
     </properties>
 
     <dependencies>
+        <!-- SQLite JDBC Dependency -->
         <dependency>
             <groupId>org.xerial</groupId>
             <artifactId>sqlite-jdbc</artifactId>
             <version>3.42.0.0</version>
         </dependency>
+
+        <!-- Firebase Admin SDK Dependency -->
+        <dependency>
+            <groupId>com.google.firebase</groupId>
+            <artifactId>firebase-admin</artifactId>
+            <version>8.2.0</version> <!-- Use the latest stable version -->
+        </dependency>
+
+        <!-- Add other dependencies here -->
     </dependencies>
 
     <build>
