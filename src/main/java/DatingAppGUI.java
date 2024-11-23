@@ -7,7 +7,7 @@ public class DatingAppGUI extends JFrame {
     private DatabaseManager database;
     private User currentUser;
     private String[] availableGenders = {"Male", "Female", "Other"};
-    private String[] availableInterests = {"Technology", "Sports", "Music", "Art", "Travel", "Cooking", "Porn", "Luis's mom"};
+    private String[] availableInterests = {"Technology", "Sports", "Music", "Art", "Travel", "Cooking", "Porn", "Aryan's gf"};
     private List<Integer> ageList = new ArrayList<>();
     private Object[] ageArray;
 
