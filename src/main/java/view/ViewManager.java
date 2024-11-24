@@ -40,3 +40,4 @@ public class ViewManager implements PropertyChangeListener {
         this.viewManagerModel.addPropertyChangeListener(this);
     }
 }
+// HELLO
