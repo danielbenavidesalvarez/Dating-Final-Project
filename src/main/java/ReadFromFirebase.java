@@ -49,4 +49,8 @@ public class ReadFromFirebase {
         });
 
     }
+
+    public static void passwordAuthentication(){
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("users");
+    }
 }

@@ -74,7 +74,8 @@ public class DatabaseManager {
                         rs.getInt("age"),
                         rs.getString("gender"),
                         rs.getString("location"),
-                        new ArrayList<>()
+                        new ArrayList<>(),
+                        rs.getString("password")
                 );
             }
         } catch (SQLException e) {
@@ -94,7 +95,8 @@ public class DatabaseManager {
                         rs.getInt("age"),
                         rs.getString("gender"),
                         rs.getString("location"),
-                        new ArrayList<>()
+                        new ArrayList<>(),
+                        rs.getString("password")
                 ));
             }
         } catch (SQLException e) {

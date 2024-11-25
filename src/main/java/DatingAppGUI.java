@@ -21,7 +21,8 @@ public class DatingAppGUI extends JFrame {
     }
 
     private void initialize() {
-        setTitle("Vamos Dating App");
+        setTitle("Dating App");
+        FirebaseInit.initializeFirebase();
         setSize(400, 500);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
@@ -47,6 +48,9 @@ public class DatingAppGUI extends JFrame {
     private void createProfile() {
         String username = JOptionPane.showInputDialog(this, "Enter username:");
         if (username == null || username.isEmpty()) return;
+
+        String password = JOptionPane.showInputDialog(this, "Enter password:");
+        if (password == null || password.isEmpty()) return;
 
         int age = (int) JOptionPane.showInputDialog(
                 this, "Enter age:", "Select Age",
@@ -76,8 +80,8 @@ public class DatingAppGUI extends JFrame {
         }
 
 
-        FirebaseInit.initializeFirebase();
-        WriteToFirebase.saveUserProfile(username, age, gender, location, interestList);
+
+        WriteToFirebase.saveUserProfile(username, age, gender, location, interestList, password);
         ReadFromFirebase.userExistance(username, new UserExistenceCallback() {
             @Override
             public void onResult(boolean exists) {
@@ -88,20 +92,23 @@ public class DatingAppGUI extends JFrame {
                     JOptionPane.showMessageDialog(null, "Username already exists.");
                 }
             }
-        });
+        });}
 
-        if (database.addUser(currentUser)) {
-            JOptionPane.showMessageDialog(this, "Profile created successfully!");
-        } else {
-            JOptionPane.showMessageDialog(this, "Username already exists.");
-        }
-    }
 
     private void logIn() {
         String username = JOptionPane.showInputDialog(this, "Enter your username:");
         if (username == null || username.isEmpty()) return;
 
-        currentUser = database.findUserByUsername(username);
+        ReadFromFirebase.userExistance(username, new UserExistenceCallback() {
+            @Override
+            public void onResult(boolean exists) {
+                if (!exists) {
+                    JOptionPane.showMessageDialog(null, "Username does not exist.");
+                    return;
+                }
+            }
+        });
+
 
         if (currentUser != null) {
             JOptionPane.showMessageDialog(this, "Logged in successfully!");

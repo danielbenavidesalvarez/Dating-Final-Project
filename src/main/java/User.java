@@ -1,7 +1,5 @@
 import java.util.HashMap;
 import java.util.ArrayList;
-import java.util.Set;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -11,24 +9,26 @@ public class User {
     private String gender;
     private String location;
     private List<String> interests;
-    private Set<String> likes;
-    private Set<String> mutualLikes;
+    private List<String> likes;
+    private List<String> mutualLikes;
     private Map<String, List<Message>> conversations;
     private boolean hasNewMessages;
     private boolean hasNewMatches;
+    private String pw;
 
     // Constructor
-    public User(String username, int age, String gender, String location, List<String> interests) {
+    public User(String username, int age, String gender, String location, List<String> interests, String password) {
         this.username = username;
         this.age = age;
         this.gender = gender;
         this.location = location;
         this.interests = interests;
-        this.likes = new HashSet<>();
-        this.mutualLikes = new HashSet<>();
+        this.likes = new ArrayList<>();
+        this.mutualLikes = new ArrayList<>();
         this.conversations = new HashMap<>();
         this.hasNewMessages = false;
         this.hasNewMatches = false;
+        this.pw = password;
     }
 
     // Getters
@@ -37,8 +37,8 @@ public class User {
     public String getGender() { return gender; }
     public String getLocation() { return location; }
     public List<String> getInterests() { return interests; }
-    public Set<String> getMutualLikes() { return mutualLikes; }
-    public Set<String> getLikes() { return likes; }
+    public List<String> getMutualLikes() { return mutualLikes; }
+    public List<String> getLikes() { return likes; }
 
     // Add a like
     public void likeUser(String username) { likes.add(username); }
