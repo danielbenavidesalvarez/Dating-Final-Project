@@ -33,7 +33,7 @@ public class ViewManager implements PropertyChangeListener {
     private final JPanel views;
     private final ViewManagerModel viewManagerModel;
 
-    public ViewManager(JPanel views, CardLayout cardLayout, ViewManagerModel viewManagerModel {
+    public ViewManager(JPanel views, CardLayout cardLayout, ViewManagerModel viewManagerModel) {
         this.viewManagerModel = viewManagerModel;
         this.cardLayout = cardLayout;
         this.views = views;

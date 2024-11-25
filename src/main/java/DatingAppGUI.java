@@ -75,7 +75,21 @@ public class DatingAppGUI extends JFrame {
             if (addMore == JOptionPane.NO_OPTION) break;
         }
 
-        currentUser = new User(username, age, gender, location, interestList);
+
+        FirebaseInit.initializeFirebase();
+        WriteToFirebase.saveUserProfile(username, age, gender, location, interestList);
+        ReadFromFirebase.userExistance(username, new UserExistenceCallback() {
+            @Override
+            public void onResult(boolean exists) {
+                if (exists) {
+                    JOptionPane.showMessageDialog(null, "Profile created successfully!");
+                }
+                else{
+                    JOptionPane.showMessageDialog(null, "Username already exists.");
+                }
+            }
+        });
+
         if (database.addUser(currentUser)) {
             JOptionPane.showMessageDialog(this, "Profile created successfully!");
         } else {

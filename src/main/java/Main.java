@@ -5,8 +5,7 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         FirebaseInit.initializeFirebase();
-        WriteToFirebase.saveUserProfile("user1", "ARYANISGAY", "suckadick@example.com");
-        ReadFromFirebase.fetchUserProfiles();
+        WriteToFirebase.editUserProfile("aryan", "age", 60);
         MockDatabase database = new MockDatabase();
         Scanner scanner = new Scanner(System.in);
         User currentUser = null;

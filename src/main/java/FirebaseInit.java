@@ -7,7 +7,7 @@ import java.io.FileInputStream;
 public class FirebaseInit {
     public static void initializeFirebase() {
         try {
-            FileInputStream serviceAccount = new FileInputStream("/Users/aryanpuri/IdeaProjects/dating app final new/csc207-dating-app-firebase-adminsdk-dohmq-9d2fed0bf8.json");
+            FileInputStream serviceAccount = new FileInputStream("/Users/aryanpuri/IdeaProjects/dating APP/csc207-dating-app-firebase-adminsdk-dohmq-a8af13b50c.json");
 
             FirebaseOptions options = FirebaseOptions.builder()
                     .setCredentials(GoogleCredentials.fromStream(serviceAccount))
