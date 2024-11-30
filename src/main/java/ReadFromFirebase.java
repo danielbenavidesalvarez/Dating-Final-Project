@@ -68,7 +68,7 @@ public class ReadFromFirebase {
 
     }
 
-    public static void checkUser(String username) {
+    public static void checkUser(String username, String password, UserExistenceCallback callback) {
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference("users");
         Query checkDatabase = ref.child(username);
 
@@ -78,20 +78,25 @@ public class ReadFromFirebase {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
                     System.out.println("Data exists in 'users' node. Retrieving data...");
-//                    User user = dataSnapshot.getValue(User.class);
-//                    userName(user);
-                    String username = dataSnapshot.child("username").getValue(String.class);
-                    String password = dataSnapshot.child("pw").getValue(String.class);
-                    System.out.println("Password: " + password + username);
-                    returner(true);
-
-
+                    String dbUsername = dataSnapshot.child("username").getValue(String.class);
+                    String dbPassword = dataSnapshot.child("pw").getValue(String.class);
+                    System.out.println("details: " + dbPassword + "  " + dbUsername);
+                    if (dbUsername != null && dbPassword != null && dbPassword.equals(password)) {
+                        callback.onResult(true, "authentication successful");
+                    }
+                    else{
+                        callback.onResult(false, "username or password incorrect");
+                    }
+                }
+                else {
+                    callback.onResult(false, "user not found");
                 }
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 System.err.println("Error reading data: " + databaseError.getMessage());
+                callback.onResult(false, "Error reading data");
 
             }
 
@@ -134,7 +139,7 @@ public class ReadFromFirebase {
     public static void main(String[] args) {
         // Initialize Firebase
         FirebaseInit.initializeFirebase();
-        checkUser("ahana");
+//        checkUser("ahana");
         try {
             Thread.sleep(5000); // Adjust time as needed
         } catch (InterruptedException e) {
