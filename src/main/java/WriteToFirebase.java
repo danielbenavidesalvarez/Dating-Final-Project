@@ -35,6 +35,7 @@ public class WriteToFirebase {
 
     }
 
+
     public void sendMessage(String sender, String receiver, String content) {
         // Firebase reference to add a new message
         String threadId = UserConversationsRetriever.generateThreadId(sender, receiver);
