@@ -1,29 +1,33 @@
 package interface_adapter;
+
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+
 /**
-The view model for our clean architecture implementation
-* The class delegates work to a PropertyChangeSupport object for
-* managing the property change events.
+ * The ViewModel for our CA implementation.
+ * This class delegates work to a PropertyChangeSupport object for
+ * managing the property change events.
+ *
  * @param <T> The type of state object contained in the model.
-*/
+ */
 public class ViewModel<T> {
+
     private final String viewName;
 
     private final PropertyChangeSupport support = new PropertyChangeSupport(this);
 
     private T state;
-//    initializer
+
     public ViewModel(String viewName) {
         this.viewName = viewName;
     }
 
     public String getViewName() {
-        return viewName;
+        return this.viewName;
     }
 
     public T getState() {
-        return state;
+        return this.state;
     }
 
     public void setState(T state) {
@@ -33,8 +37,7 @@ public class ViewModel<T> {
     /**
      * Fires a property changed event for the state of this ViewModel.
      */
-
-    public void firePropertyChanged(){
+    public void firePropertyChanged() {
         this.support.firePropertyChange("state", null, this.state);
     }
 
@@ -47,7 +50,7 @@ public class ViewModel<T> {
      * it can use the property name to distinguish which property has changed.
      * @param propertyName the label for the property that was changed
      */
-    public void FirePropertyChanged(String propertyName) {
+    public void firePropertyChanged(String propertyName) {
         this.support.firePropertyChange(propertyName, null, this.state);
     }
 
@@ -55,15 +58,7 @@ public class ViewModel<T> {
      * Adds a PropertyChangeListener to this ViewModel.
      * @param listener The PropertyChangeListener to be added
      */
-
     public void addPropertyChangeListener(PropertyChangeListener listener) {
         this.support.addPropertyChangeListener(listener);
     }
-
-
-
-
-
-
-
 }
