@@ -1,6 +1,8 @@
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -31,6 +33,18 @@ public class WriteToFirebase {
 
 
 
+    }
+
+    public void sendMessage(String sender, String receiver, String content) {
+        // Firebase reference to add a new message
+        String threadId = UserConversationsRetriever.generateThreadId(sender, receiver);
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("threads").child(threadId).child("messages");
+        String messageId = ref.push().getKey();
+        Message message = new Message(sender, receiver, content);
+        message.setId(messageId);
+        if (messageId != null) {
+            ref.child(messageId).setValueAsync(message);
+        }
     }
 
     public static void main(String[] args) {

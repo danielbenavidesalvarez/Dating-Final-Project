@@ -8,30 +8,34 @@ import java.util.ArrayList;
 
 public class UserConversationsRetriever {
 
-    public static void printMessagesBetweenUsers(String user1, String user2) {
+    public static void printMessagesBetweenUsers(String user1, String user2, MessageCallback callback) {
         String threadId = generateThreadId(user1, user2);
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference("threads").child(threadId).child("messages");
 
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                List<Message> messages = new ArrayList<>();
                 System.out.println("Messages between " + user1 + " and " + user2 + ":");
                 for (DataSnapshot messageSnapshot : dataSnapshot.getChildren()) {
-                    Message message = messageSnapshot.getValue(Message.class);
+                    Message message = Message.populateMessageFromSnapshot(messageSnapshot);
                     if (message != null) {
-                        System.out.println(message);
+                        messages.add(message);
+                        System.out.println(message.getContent());
                     }
                 }
+                callback.update(messages);
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 System.err.println("Error fetching messages: " + databaseError.getMessage());
+                callback.update(new ArrayList<>());
             }
         });
     }
 
-    private static String generateThreadId(String user1, String user2) {
+    public static String generateThreadId(String user1, String user2) {
         // Generate a unique thread ID based on participant usernames
         if (user1.compareTo(user2) < 0) {
             return user1 + "_" + user2;
@@ -42,10 +46,20 @@ public class UserConversationsRetriever {
 
     public static void main(String[] args) {
         FirebaseInit.initializeFirebase();
+        WriteToFirebase a = new WriteToFirebase();
 
         // Retrieve messages between johnDoe and janeDoe
-        printMessagesBetweenUsers("johnDoe", "janeDoe");
+        printMessagesBetweenUsers("johnDoe", "janeDoe", new MessageCallback() {
 
+            @Override
+            public void update(List<Message> messages) {
+                for (Message message : messages) {
+                    System.out.println(message.getId());
+                }
+            }
+        });
+        a.sendMessage("johnDoe","janeDoe", "hello world" );
+        a.sendMessage("aryan","me", "luis gay" );
         try {
             Thread.sleep(10000); // Wait to see updates in Firebase
         } catch (InterruptedException e) {
