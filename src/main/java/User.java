@@ -17,7 +17,10 @@ public class User {
     private String pw;
 
     // Constructor
-    public User(String username, int age, String gender, String location, List<String> interests, String password) {
+    public User(){
+
+    }
+    public User(int age, String gender, List<String> interests, String location, String password, String username) {
         this.username = username;
         this.age = age;
         this.gender = gender;
@@ -32,6 +35,9 @@ public class User {
     }
 
     // Getters
+    public String getPw() {
+        return pw;
+    }
     public String getUsername() { return username; }
     public int getAge() { return age; }
     public String getGender() { return gender; }

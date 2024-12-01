@@ -69,14 +69,14 @@ public class DatabaseManager {
             pstmt.setString(1, username);
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
-                return new User(
-                        rs.getString("username"),
-                        rs.getInt("age"),
-                        rs.getString("gender"),
-                        rs.getString("location"),
-                        new ArrayList<>(),
-                        rs.getString("password")
-                );
+//                return new User(
+//                        rs.getString("username"),
+//                        rs.getInt("age"),
+//                        rs.getString("gender"),
+//                        rs.getString("location"),
+//                        new ArrayList<>(),
+//                        rs.getString("password")
+//                );
             }
         } catch (SQLException e) {
             System.err.println("Error finding user: " + e.getMessage());
@@ -90,14 +90,14 @@ public class DatabaseManager {
         try (Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
             while (rs.next()) {
-                users.add(new User(
-                        rs.getString("username"),
-                        rs.getInt("age"),
-                        rs.getString("gender"),
-                        rs.getString("location"),
-                        new ArrayList<>(),
-                        rs.getString("password")
-                ));
+//                users.add(new User(
+//                        rs.getString("username"),
+//                        rs.getInt("age"),
+//                        rs.getString("gender"),
+//                        rs.getString("location"),
+//                        new ArrayList<>(),
+//                        rs.getString("password")
+//                ));
             }
         } catch (SQLException e) {
             System.err.println("Error retrieving users: " + e.getMessage());

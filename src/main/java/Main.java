@@ -37,7 +37,7 @@ public class Main {
                         String password = scanner.nextLine();
                         List<String> interestList = new ArrayList<String>();
                         interestList.add(interests);
-                        currentUser = new User(username, age, gender, location, interestList, password);
+//                        currentUser = new User(username, age, gender, location, interestList, password);
                         database.addUser(currentUser);
                         loggedIn = true;
                         break;

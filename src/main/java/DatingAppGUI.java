@@ -49,8 +49,8 @@ public class DatingAppGUI extends JFrame {
         String username = JOptionPane.showInputDialog(this, "Enter username:");
         if (username == null || username.isEmpty()) return;
 
-        String password = JOptionPane.showInputDialog(this, "Enter password:");
-        if (password == null || password.isEmpty()) return;
+        String pw = JOptionPane.showInputDialog(this, "Enter password:");
+        if (pw == null || pw.isEmpty()) return;
 
         int age = (int) JOptionPane.showInputDialog(
                 this, "Enter age:", "Select Age",
@@ -81,42 +81,41 @@ public class DatingAppGUI extends JFrame {
 
 
 
-        WriteToFirebase.saveUserProfile(username, age, gender, location, interestList, password);
-        ReadFromFirebase.userExistance(username, new UserExistenceCallback() {
-            @Override
-            public void onResult(boolean exists) {
-                if (exists) {
-                    JOptionPane.showMessageDialog(null, "Profile created successfully!");
-                }
-                else{
-                    JOptionPane.showMessageDialog(null, "Username already exists.");
-                }
-            }
-        });}
+        WriteToFirebase.saveUserProfile(username, age, gender, location, interestList, pw);}
+//        ReadFromFirebase.userExistance(username, new UserExistenceCallback() {
+//            @Override
+//            public void onResult(boolean exists) {
+//                if (exists) {
+//                    JOptionPane.showMessageDialog(null, "Profile created successfully!");
+//                }
+//                else{
+//                    JOptionPane.showMessageDialog(null, "Username already exists.");
+//                }
+//            }
+//        });}
 
 
     private void logIn() {
         String username = JOptionPane.showInputDialog(this, "Enter your username:");
         if (username == null || username.isEmpty()) return;
 
-        ReadFromFirebase.userExistance(username, new UserExistenceCallback() {
+        String password = JOptionPane.showInputDialog(this, "Enter your password:");
+        if (password == null || password.isEmpty()) return;
+
+        ReadFromFirebase.checkUser(username, password, new UserExistenceCallback() {
             @Override
-            public void onResult(boolean exists) {
+            public void onResult(boolean exists, String message) {
                 if (!exists) {
-                    JOptionPane.showMessageDialog(null, "Username does not exist.");
+                    JOptionPane.showMessageDialog(null, message);
                     return;
                 }
+                else {
+                    JOptionPane.showMessageDialog(null, message);
+                }
             }
-        });
+        });}
 
 
-        if (currentUser != null) {
-            JOptionPane.showMessageDialog(this, "Logged in successfully!");
-            showUserMenu();
-        } else {
-            JOptionPane.showMessageDialog(this, "Profile not found.");
-        }
-    }
 
     private void showUserMenu() {
         String[] options = {"View Mutual Likes", "Like/Dislike Profiles", "Messages", "Log Out"};

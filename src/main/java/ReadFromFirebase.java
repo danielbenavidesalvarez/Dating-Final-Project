@@ -13,51 +13,6 @@ import java.util.List;
 
 public class ReadFromFirebase {
 
-    // Method to retrieve all user objects and print their data
-    public static void fetchAndPrintUsers() {
-        // Reference to the "users" node in your Firebase database
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("users");
-
-        // Adding a listener to fetch data
-        ref.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot snapshot) {
-                if (snapshot.exists()) {
-                    System.out.println("Data exists in 'users' node. Retrieving data...");
-                    List<User> userList = new ArrayList<>();
-                    for (DataSnapshot userSnapshot : snapshot.getChildren()) {
-                        User user = userSnapshot.getValue(User.class);
-                        if (user != null) {
-                            userList.add(user);
-
-                            // Print user details
-                            System.out.println("User Retrieved:");
-                            System.out.println("Username: " + user.getUsername());
-                            System.out.println("Age: " + user.getAge());
-                            System.out.println("Gender: " + user.getGender());
-                            System.out.println("Location: " + user.getLocation());
-                            System.out.println("Password: " + user.getPw());
-                            System.out.println("Interests: " + user.getInterests());
-                            System.out.println("------------------");
-                        } else {
-                            System.out.println("Error: Could not retrieve user data.");
-                        }
-                    }
-
-                    // Print total users retrieved
-                    System.out.println("Total Users Retrieved: " + userList.size());
-                } else {
-                    System.out.println("No data found in 'users' node.");
-                }
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError error) {
-                System.err.println("Error reading data: " + error.getMessage());
-            }
-        });
-    }
     public static boolean returner(boolean flag) {
         System.out.println(flag);
         return flag;
@@ -104,23 +59,33 @@ public class ReadFromFirebase {
         });
 
 
-
     }
-    public static void test(){
+    public static void test(UserDataRetreived callback) {
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference("users");
 
-        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+        ref.addValueEventListener(new ValueEventListener() {
 
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                List<User> userList = new ArrayList<>();
                 if (dataSnapshot.exists()) {
                     System.out.println("Data exists in 'users' node. Retrieving data for test...");
-                    User user = dataSnapshot.getValue(User.class);
-                    System.out.println("User Retrieved:");
-                    System.out.println("Username: " + user.getUsername());
+                    for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
+                        System.out.println(childSnapshot.getKey());
+//                        User testUser = childSnapshot.getValue(User.class);
+//                        userList.add(testUser);
+//                        System.out.println(testUser.getUsername());
+//                        System.out.println(testUser.getAge());
+                    }
+//                    System.out.println("Data exists in 'users' node. Retrieving data for test...");
+//                    User user = dataSnapshot.getValue(User.class);
+//                    System.out.println("User Retrieved:");
+//                    System.out.println("Username: " + user.getUsername());
+                    callback.onDataRetrieved(userList);
                 }
                 else {
                     System.out.println("No data found in 'users' node.");
+                    callback.onDataRetrieved(userList);
                 }
 
 
@@ -129,6 +94,7 @@ public class ReadFromFirebase {
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 System.err.println("Error reading data: " + databaseError.getMessage());
+                callback.onDataRetrieved(new ArrayList<>());
 
             }
         });
@@ -136,19 +102,84 @@ public class ReadFromFirebase {
 
     }
 
+    public static void testv2(UserDataRetreived callback) {
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("users");
+        ref.addValueEventListener(new ValueEventListener() {
+
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                List<User> userList = new ArrayList<>();
+
+                if (dataSnapshot.exists()) {
+                    for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
+                        try {
+                            User user = childSnapshot.getValue(User.class);
+                            if (user != null) {
+                                userList.add(user);
+                            } else {
+                                System.err.println("Failed to parse user for key: " + childSnapshot.getKey());
+                            }
+                        } catch (Exception e) {
+                            System.err.println("Error processing user: " + childSnapshot.getKey());
+                            e.printStackTrace(); // Log the full error for debugging
+                        }
+//                        System.out.println(childSnapshot.getKey());
+//                        User user = childSnapshot.getValue(User.class);
+//                        userList.add(user);
+                    }
+                    callback.onDataRetrieved(userList);
+                }
+                else{
+                    System.out.println("No data found in 'users' node.");
+                    callback.onDataRetrieved(new ArrayList<>());
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.err.println("Error reading data: " + databaseError.getMessage());
+                callback.onDataRetrieved(new ArrayList<>());
+
+            }
+        });
+    }
+
     public static void main(String[] args) {
         // Initialize Firebase
         FirebaseInit.initializeFirebase();
-//        checkUser("ahana");
-        try {
-            Thread.sleep(5000); // Adjust time as needed
-        } catch (InterruptedException e) {
-            e.printStackTrace();}
-//        test();
-//        try {
-//            Thread.sleep(1000000); // Adjust time as needed
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();}
+        testv2(new UserDataRetreived() {
+            @Override
+            public void onDataRetrieved(List<User> users) {
+                if (users.isEmpty()) {
+                    System.out.println("No data found in 'users' node.");
+                } else {
+                    System.out.println("Users retrieved successfully:");
+                    for (User user : users) {
+                        System.out.println("Username: " + user.getUsername());
+                        System.out.println("Password: " + user.getPw());
+                        System.out.println("age" + user.getAge());
+                    }
+                }
+            }
+        });
+//        testv2(new UserDataRetreived() {
+//            @Override
+//            public void onDataRetrieved(List<User> users) {
+//                if (users.isEmpty()) {
+//                    System.out.println("No data found in 'users' node.");
+//                }
+//                else{
+//                    for (User user : users) {
+//                        System.out.println(user.getPw());
+//                    }
+//                }
+//            }
+//        });
 
-        // Fetch and print users
+        try {
+            Thread.sleep(10000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
 }}

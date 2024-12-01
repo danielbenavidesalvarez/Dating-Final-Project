@@ -10,8 +10,14 @@ public class WriteToFirebase {
     public static void saveUserProfile(String username, int age, String gender, String location, List<String> interests, String pw) {
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference("users");
 
-        User user = new User(username, age, gender, location, interests, pw); // Create a User object
+        User user = new User(age, gender, interests, location, pw, username); // Create a User object
         ref.child(username).setValueAsync(user); // Save the user object under their userId
+        editUserProfile(username, "pw", pw);
+        try {
+            Thread.sleep(5000); // Adjust time as needed
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         System.out.println("User profile saved!");
     }
 
@@ -30,7 +36,19 @@ public class WriteToFirebase {
     public static void main(String[] args) {
         FirebaseInit.initializeFirebase();
         List<String> interests = new ArrayList<>();
-        interests.add("porn");
-        WriteToFirebase.saveUserProfile("sam", 20, "male", "toronto", interests, "food");
+        interests.add("abc");
+        WriteToFirebase.saveUserProfile("tammy", 20, "male", "toronto", interests, "food");
+        try {
+            Thread.sleep(5000); // Adjust time as needed
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        int i = 5;
+//        WriteToFirebase.editUserProfile("tammy", "pw", i);
+        try {
+            Thread.sleep(5000); // Adjust time as needed
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }
