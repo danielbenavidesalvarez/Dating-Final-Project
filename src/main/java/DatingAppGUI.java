@@ -4,15 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DatingAppGUI extends JFrame {
-    private DatabaseManager database;
+//    private DatabaseManager database;
     private User currentUser;
     private String[] availableGenders = {"Male", "Female", "Other"};
-    private String[] availableInterests = {"Technology", "Sports", "Music", "Art", "Travel", "Cooking", "Porn", "Aryan's gf"};
+    private String[] availableInterests = {"Technology", "Sports", "Music", "Art", "Travel", "Cooking", "Porn", "Luis's mother", "Peruvian drugs"};
     private List<Integer> ageList = new ArrayList<>();
     private Object[] ageArray;
 
     public DatingAppGUI() {
-        database = new DatabaseManager();
+//        database = new DatabaseManager();
         initialize();
         for (int i = 18; i <= 100; i++) {
             ageList.add(i);
@@ -117,20 +117,20 @@ public class DatingAppGUI extends JFrame {
 
 
 
-    private void showUserMenu() {
-        String[] options = {"View Mutual Likes", "Like/Dislike Profiles", "Messages", "Log Out"};
-        int choice = JOptionPane.showOptionDialog(
-                this, "Choose an option", "User Menu",
-                JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE,
-                null, options, options[0]);
-
-        switch (choice) {
-            case 0 -> viewMutualLikes();
-            case 1 -> likeDislikeProfiles();
-            case 2 -> messageMenu();
-            case 3 -> currentUser = null;
-        }
-    }
+//    private void showUserMenu() {
+//        String[] options = {"View Mutual Likes", "Like/Dislike Profiles", "Messages", "Log Out"};
+//        int choice = JOptionPane.showOptionDialog(
+//                this, "Choose an option", "User Menu",
+//                JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE,
+//                null, options, options[0]);
+//
+//        switch (choice) {
+//            case 0 -> viewMutualLikes();
+//            case 1 -> likeDislikeProfiles();
+//            case 2 -> messageMenu();
+//            case 3 -> currentUser = null;
+//        }
+//    }
 
     private void viewMutualLikes() {
         if (currentUser.getMutualLikes().isEmpty()) {
@@ -143,66 +143,66 @@ public class DatingAppGUI extends JFrame {
             JOptionPane.showMessageDialog(this, message.toString());
         }
     }
+//
+//    private void likeDislikeProfiles() {
+//        List<User> users = database.getAllUsers();
+//        for (User user : users) {
+//            if (!user.getUsername().equals(currentUser.getUsername())) {
+//                int response = JOptionPane.showConfirmDialog(this, "Do you like " + user.getUsername() + "?", "Like/Dislike", JOptionPane.YES_NO_OPTION);
+//                if (response == JOptionPane.YES_OPTION) {
+//                    currentUser.likeUser(user.getUsername());
+//                    if (database.isMutualLike(currentUser.getUsername(), user.getUsername())) {
+//                        currentUser.addMutualLike(user.getUsername());
+//                        user.addMutualLike(currentUser.getUsername());
+//                        JOptionPane.showMessageDialog(this, "It's a match with " + user.getUsername() + "!");
+//                    }
+//                }
+//            }
+//        }
+//    }
 
-    private void likeDislikeProfiles() {
-        List<User> users = database.getAllUsers();
-        for (User user : users) {
-            if (!user.getUsername().equals(currentUser.getUsername())) {
-                int response = JOptionPane.showConfirmDialog(this, "Do you like " + user.getUsername() + "?", "Like/Dislike", JOptionPane.YES_NO_OPTION);
-                if (response == JOptionPane.YES_OPTION) {
-                    currentUser.likeUser(user.getUsername());
-                    if (database.isMutualLike(currentUser.getUsername(), user.getUsername())) {
-                        currentUser.addMutualLike(user.getUsername());
-                        user.addMutualLike(currentUser.getUsername());
-                        JOptionPane.showMessageDialog(this, "It's a match with " + user.getUsername() + "!");
-                    }
-                }
-            }
-        }
-    }
+//    private void messageMenu() {
+//        String[] options = {"Send Message", "View Messages"};
+//        int choice = JOptionPane.showOptionDialog(
+//                this, "Choose an option", "Messages",
+//                JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE,
+//                null, options, options[0]);
+//
+//        if (choice == 0) {
+//            sendMessage();
+//        } else if (choice == 1) {
+//            viewMessages();
+//        }
+//    }
 
-    private void messageMenu() {
-        String[] options = {"Send Message", "View Messages"};
-        int choice = JOptionPane.showOptionDialog(
-                this, "Choose an option", "Messages",
-                JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE,
-                null, options, options[0]);
+//    private void sendMessage() {
+//        List<String> mutualLikes = new ArrayList<>(currentUser.getMutualLikes());
+//        if (mutualLikes.isEmpty()) {
+//            JOptionPane.showMessageDialog(this, "No users available to message.");
+//        } else {
+//            String receiver = (String) JOptionPane.showInputDialog(this, "Select a user to message:", "Send Message", JOptionPane.QUESTION_MESSAGE, null, mutualLikes.toArray(), mutualLikes.get(0));
+//            if (receiver != null) {
+//                String content = JOptionPane.showInputDialog(this, "Enter your message:");
+//                if (content != null && !content.isEmpty()) {
+//                    database.sendMessage(currentUser.getUsername(), receiver, content);
+//                    JOptionPane.showMessageDialog(this, "Message sent to " + receiver);
+//                }
+//            }
+//        }
+//    }
 
-        if (choice == 0) {
-            sendMessage();
-        } else if (choice == 1) {
-            viewMessages();
-        }
-    }
-
-    private void sendMessage() {
-        List<String> mutualLikes = new ArrayList<>(currentUser.getMutualLikes());
-        if (mutualLikes.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "No users available to message.");
-        } else {
-            String receiver = (String) JOptionPane.showInputDialog(this, "Select a user to message:", "Send Message", JOptionPane.QUESTION_MESSAGE, null, mutualLikes.toArray(), mutualLikes.get(0));
-            if (receiver != null) {
-                String content = JOptionPane.showInputDialog(this, "Enter your message:");
-                if (content != null && !content.isEmpty()) {
-                    database.sendMessage(currentUser.getUsername(), receiver, content);
-                    JOptionPane.showMessageDialog(this, "Message sent to " + receiver);
-                }
-            }
-        }
-    }
-
-    private void viewMessages() {
-        List<Message> receivedMessages = database.getMessagesForUser(currentUser.getUsername());
-        if (receivedMessages.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "No messages at this time.");
-        } else {
-            StringBuilder messageLog = new StringBuilder("Messages:\n");
-            for (Message message : receivedMessages) {
-                messageLog.append(message).append("\n");
-            }
-            JOptionPane.showMessageDialog(this, messageLog.toString());
-        }
-    }
+//    private void viewMessages() {
+//        List<Message> receivedMessages = database.getMessagesForUser(currentUser.getUsername());
+//        if (receivedMessages.isEmpty()) {
+//            JOptionPane.showMessageDialog(this, "No messages at this time.");
+//        } else {
+//            StringBuilder messageLog = new StringBuilder("Messages:\n");
+//            for (Message message : receivedMessages) {
+//                messageLog.append(message).append("\n");
+//            }
+//            JOptionPane.showMessageDialog(this, messageLog.toString());
+//        }
+//    }
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
