@@ -1,29 +1,13 @@
 {
-  "project_info": {
-    "project_number": "886943656157",
-    "project_id": "csc207-dating-app",
-    "storage_bucket": "csc207-dating-app.firebasestorage.app"
-  },
-  "client": [
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:886943656157:android:c302c9be4d33c5282dd334",
-        "android_client_info": {
-          "package_name": "com.example.datingapp"
-        }
-      },
-      "oauth_client": [],
-      "api_key": [
-        {
-          "current_key": "AIzaSyBBnIag5wY2ex5TQWE7d92_e5_SUJ8BN_k"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": []
-        }
-      }
-    }
-  ],
-  "configuration_version": "1"
+  "type": "service_account",
+  "project_id": "datingapp207-98113",
+  "private_key_id": "4388acddda16d477dcd46b658dbd9f45aaca1631",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDdZLS8jQFdzoOK\nbarmBnt93Qm/l6s3dwhtaTeE+n4RvrOukRPkIV1zQFNzlG3VgrgAv7A8WzVk645Y\nHXRk+3ZbZxIf26TcA1LXTonFKBD7e4Fd2guLkhdOwrHrAby/16VP25xUeqwoBN5/\n8yCTvRKimCrGIfrPC3651B49lmgXQj1JZI2I4gujEnYInrX+MOnLQLqThJM96YRY\nG1d9S1PZak2CvulMtcqPSfKLlUu5+A26VDZcBKg0kanN12ZgHCsgRcGOzZWGT/TY\ntM8ldqUVkOH0uHpVVplyVmm/a738pOs9F4DJJagUpVYnDcVDcANW1OBna2MpTIZR\nc0sPP/2fAgMBAAECggEAWwjB2JYSbcQxCoa1swgPV13AWGvBF3l2maaeEav+ksVb\nlPhKuY+OoYldxzTNRPIPPx+TE/5dIjZJvam+5pcPv93N8hOa4mzrb2T3+X3UHdRX\nCYRTIvzbYKNmDUAVoLzHWOLwkTwv9fSqmOocByPDud/gFsB6JRCQ91BlbuWdv5HV\nJUC/8rZ5un9kx9j1fJCqj1IDDK8hkQ6dmya8M3uNzRpjtrFfX9G9NCYI1bfBTJ4s\nsjVoS2dxv06JvOM1el8D/BOtZ+8MBi+nEzYJ1gVoz4YESw/UukJrdSVwdfU6BWRl\n3u7XW6rl1jvXlNP1JYbdZ9KWq529nPXN0KJrapIyIQKBgQD58br3yYDRDmaM9BWc\ncyH9I+foMIugazyL/merd+08T0JRPAVZzbRMynmrpHu6BrrYutqHhmqestR1xoSI\n+LX6vpB0YVmDnAE7rDmv7JlkQwVaPLX4CjmHbsv7KwdNogewsWSC/rEi22qU30zg\nOhHe8bwUOfXYqi/bmLHW3nB5JQKBgQDiwePTgFD2BWd7HjVzePz/RfzhJITqdhus\nmfSBLMZjJtMgLNZOZG8SLOZ/Qfz3FAcfLs1fB06ZFEyGpOWiCMbWGrqlL+tGCc/V\nE23P9JZIL3bIzQ9khS8t/DyEvSY8CtTAnOfwu7pi8Ab7o/tRjEZJ81PczNyLfzGK\nP07sj/uqcwKBgGsn8LGE6T43f03U42MElUDS4PzRuzrWXsniEw4XR1VA4by0D9M1\ndqQpdkpZJVZWxkpeqYvK2/EX2DB6IJ4ciuBqTMIoblkXTAwKRV0gAY9TkHrkZltl\n/s4KeVdAVkw5ODTPiLkEemroSOR0a6ACJWFAoBLH2pe+NvBdoXjuOqglAoGAbnMm\nt7R+uvby6qNSQcai5OyAOmIBY/rXjAEJeYoHr/APUlLEqDZ/a4j3VPEdeHQG7Adt\n/WWfwSyEAel7+KrxvwQR+bgXj2vkEdN+35YxRUPpRfGsF7hPvMRp7fX8E67q5k8H\nItkt9lcX76Z2GciLzCV7qccXfdMcnEwt80hGu0UCgYEA8g+9PP5lrYNxaUdVRj9z\nOSxv5cGvCvqkVHnHtzgfzhb19qIX75PR442Y0zdPt0c/PrPFrNxU3V79JZQR7uz5\np1h4zRKGKn/QCu9TapZ+HCkPvZehI8zywG4zxGSGfQQm8sQglcrtk1LTGc7hvIf7\npgwwZTt7CQVYA012JnZCn4c=\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-yq8zh@datingapp207-98113.iam.gserviceaccount.com",
+  "client_id": "117435215126210338736",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-yq8zh%40datingapp207-98113.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
 }
