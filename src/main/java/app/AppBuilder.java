@@ -58,9 +58,7 @@ import use_case.report_account.ReportAccountUserDataAccessInterface;
 import use_case.signup.SignupInputBoundary;
 import use_case.signup.SignupInteractor;
 import use_case.signup.SignupOutputBoundary;
-import view.EditProfileView;
-import view.LoginView;
-import view.ViewManager;
+import view.*;
 
 import javax.swing.*;
 import java.awt.*;
