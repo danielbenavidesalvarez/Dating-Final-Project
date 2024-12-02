@@ -15,7 +15,7 @@ public class FirebaseInit {
 
         try {
             // Provide the path to your Firebase Admin SDK JSON file
-            FileInputStream serviceAccount = new FileInputStream("/Users/aryanpuri/IdeaProjects/dating app nov 25/src/datingapp207-98113-firebase-adminsdk-yq8zh-a995a0a9f1.json");
+            FileInputStream serviceAccount = new FileInputStream("google-services.json");
 
             FirebaseOptions options = FirebaseOptions.builder()
                     .setCredentials(GoogleCredentials.fromStream(serviceAccount))

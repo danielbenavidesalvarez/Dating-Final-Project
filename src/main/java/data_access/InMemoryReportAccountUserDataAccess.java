@@ -24,6 +24,11 @@ public class InMemoryReportAccountUserDataAccess implements ReportAccountUserDat
         return userIds.contains(userId);
     }
 
+    @Override
+    public boolean saveReport(String reportedUserId, String issueType, String description) {
+        return false;
+    }
+
     public void addUser(String userId) {
         userIds.add(userId);
     }

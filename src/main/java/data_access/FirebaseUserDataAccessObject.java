@@ -31,12 +31,13 @@ public class FirebaseUserDataAccessObject implements SignupUserDataAccessInterfa
         ReportAccountUserDataAccessInterface,
         PeopleUserDataAccessInterface, PreMessageUserDataAccessInterface {
 
+    private final DatabaseReference reportRef;
     private final DatabaseReference userRef;
 
-    public FirebaseUserDataAccessObject() {
+    public FirebaseUserDataAccessObject(){
         this.userRef = FirebaseDatabase.getInstance().getReference("users");
+        this.reportRef = FirebaseDatabase.getInstance().getReference("reports"); // Add this
     }
-
     @Override
     public boolean existsByName(String identifier) {
         CompletableFuture<Boolean> future = new CompletableFuture<>();
@@ -83,6 +84,46 @@ public class FirebaseUserDataAccessObject implements SignupUserDataAccessInterfa
                 System.out.println("User saved successfully.");
             }
         });
+    }
+    public boolean saveReport(String reportedUserId, String issueType, String description) {
+        CompletableFuture<Boolean> future = new CompletableFuture<>();
+
+        Report report = new Report(reportedUserId, issueType, description);
+
+        String reportId = reportRef.push().getKey();
+        if (reportId != null) {
+            reportRef.child(reportId).setValue(report, (error, ref) -> {
+                if (error != null) {
+                    System.err.println("Error saving report: " + error.getMessage());
+                    future.complete(false);
+                } else {
+                    System.out.println("Report saved successfully.");
+                    future.complete(true);
+                }
+            });
+        } else {
+            return false;
+        }
+
+        try {
+            return future.get();
+        } catch (Exception e) {
+            System.err.println("Error: " + e.getMessage());
+            return false;
+        }
+    }
+
+    // Inner class for reports
+    private static class Report {
+        public String reportedUserId;
+        public String issueType;
+        public String description;
+
+        public Report(String reportedUserId, String issueType, String description) {
+            this.reportedUserId = reportedUserId;
+            this.issueType = issueType;
+            this.description = description;
+        }
     }
 
 
@@ -218,4 +259,5 @@ public class FirebaseUserDataAccessObject implements SignupUserDataAccessInterfa
         return get(username);
     }
 }
+
 
