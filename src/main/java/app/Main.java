@@ -37,6 +37,8 @@ public class Main {
                 .addAnalyticsView()
                 .addAnalyticsUseCase()
                 .addReportAccountView()
+                .addPeopleUseCase()
+                .addPeopleView()
                 .build();
 
         application.pack();

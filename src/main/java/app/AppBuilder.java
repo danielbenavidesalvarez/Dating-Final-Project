@@ -27,6 +27,9 @@ import interface_adapter.login.LoginPresenter;
 import interface_adapter.login.LoginViewModel;
 import interface_adapter.logout.LogoutController;
 import interface_adapter.logout.LogoutPresenter;
+import interface_adapter.people.PeopleController;
+import interface_adapter.people.PeoplePresenter;
+import interface_adapter.people.PeopleViewModel;
 import interface_adapter.report_account.ReportAccountController;
 import interface_adapter.report_account.ReportAccountPresenter;
 import interface_adapter.report_account.ReportAccountState;
@@ -53,14 +56,15 @@ import use_case.login.LoginOutputBoundary;
 import use_case.logout.LogoutInputBoundary;
 import use_case.logout.LogoutInteractor;
 import use_case.logout.LogoutOutputBoundary;
+import use_case.people.PeopleInputBoundary;
+import use_case.people.PeopleInteractor;
+import use_case.people.PeopleOutputBoundary;
 import use_case.report_account.ReportAccountInteractor;
 import use_case.report_account.ReportAccountUserDataAccessInterface;
 import use_case.signup.SignupInputBoundary;
 import use_case.signup.SignupInteractor;
 import use_case.signup.SignupOutputBoundary;
-import view.EditProfileView;
-import view.LoginView;
-import view.ViewManager;
+import view.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -100,6 +104,8 @@ public class AppBuilder {
     private EditProfileViewModel editProfileViewModel;
     private LikeView likeView;
     private LikeViewModel likeViewModel;
+    private PeopleView peopleView;
+    private PeopleViewModel peopleViewModel;
 
 
     public AppBuilder() {
@@ -164,6 +170,29 @@ public class AppBuilder {
         likeView.setViewManagerModel(viewManagerModel);
 
         cardPanel.add(likeView, likeView.getViewName());
+        return this;
+    }
+
+    public AppBuilder addPeopleView() {
+
+        peopleViewModel = new PeopleViewModel();
+        peopleView = new PeopleView(peopleViewModel);
+
+        // Set the ViewManagerModel for navigation
+        peopleView.setViewManagerModel(viewManagerModel);
+
+        cardPanel.add(peopleView, peopleView.getViewName());
+        return this;
+    }
+
+    public AppBuilder addPeopleUseCase() {
+        final PeopleOutputBoundary peopleOutputBoundary = new PeoplePresenter(peopleViewModel);
+
+        final PeopleInputBoundary peopleInteractor =
+                new PeopleInteractor(peopleOutputBoundary, userDataAccessObject);
+
+        final PeopleController peopleController = new PeopleController(peopleInteractor);
+        peopleView.setPeopleController(peopleController);
         return this;
     }
 
@@ -345,6 +374,7 @@ public class AppBuilder {
         likeView.setLikeController(likeController);
         return this;
     }
+
 
     /**
      * Creates the JFrame for the application and initially sets the SignupView to be displayed.
