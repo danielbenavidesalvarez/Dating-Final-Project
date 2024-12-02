@@ -45,6 +45,10 @@ public class Main {
                 .addReportAccountView()
                 .addPeopleView()
                 .addPeopleUseCase()
+                .addPreMessageView()
+                .addPreMessageUseCase()
+//                .addMessageView()
+//                .addMessageView()
                 .build();
 
         application.pack();

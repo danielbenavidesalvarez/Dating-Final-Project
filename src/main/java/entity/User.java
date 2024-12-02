@@ -23,6 +23,8 @@ public interface User {
 
     String getUserId();
 
+    String getGender();
+
     void likeUser(User likedUser);
 
     // New methods for analytics

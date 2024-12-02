@@ -10,6 +10,7 @@ import use_case.like.LikeUserDataAccessInterface;
 import use_case.login.LoginUserDataAccessInterface;
 import use_case.logout.LogoutUserDataAccessInterface;
 import use_case.people.PeopleUserDataAccessInterface;
+import use_case.premessage.PreMessageUserDataAccessInterface;
 import use_case.report_account.ReportAccountUserDataAccessInterface;
 import use_case.signup.SignupUserDataAccessInterface;
 
@@ -28,7 +29,7 @@ public class FirebaseUserDataAccessObject implements SignupUserDataAccessInterfa
         LikeUserDataAccessInterface,
         AnalyticsUserDataAccessInterface,
         ReportAccountUserDataAccessInterface,
-        PeopleUserDataAccessInterface {
+        PeopleUserDataAccessInterface, PreMessageUserDataAccessInterface {
 
     private final DatabaseReference userRef;
 
@@ -212,5 +213,9 @@ public class FirebaseUserDataAccessObject implements SignupUserDataAccessInterfa
         }
     }
 
+    @Override
+    public User getUserByUsername(String username) {
+        return get(username);
+    }
 }
 

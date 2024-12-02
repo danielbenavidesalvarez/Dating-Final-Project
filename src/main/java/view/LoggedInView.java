@@ -38,6 +38,7 @@ public class LoggedInView extends JPanel implements PropertyChangeListener {
     private final JButton analyticsButton;
     private final JButton reportAccountButton;
     private final JButton peopleButton;
+    private final JButton messageButton;
 
     public LoggedInView(LoggedInViewModel loggedInViewModel) {
         this.loggedInViewModel = loggedInViewModel;
@@ -74,6 +75,9 @@ public class LoggedInView extends JPanel implements PropertyChangeListener {
 
         peopleButton = new JButton("People");
         buttons.add(peopleButton); // Add button to the layout
+
+        messageButton = new JButton("Message");
+        buttons.add(messageButton);
 
 
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -134,6 +138,18 @@ public class LoggedInView extends JPanel implements PropertyChangeListener {
                 }
         );
 
+        messageButton.addActionListener(
+                evt -> {
+                    if (viewManagerModel != null) {
+                        viewManagerModel.setState("Message Info"); // Navigate to Like View
+                        viewManagerModel.firePropertyChanged();
+                    }
+                    else {
+                        System.err.println("ViewManagerModel is not set! Cannot navigate to People View.");
+                    }
+                }
+        );
+
         peopleButton.addActionListener(
                 evt -> {
                     if (viewManagerModel != null) {
@@ -157,6 +173,16 @@ public class LoggedInView extends JPanel implements PropertyChangeListener {
                     }
                 }
         );
+        messageButton.addActionListener(evt -> {
+            if (viewManagerModel != null) {
+                viewManagerModel.setState("MessagesView"); // Navigate to Analytics View
+                viewManagerModel.firePropertyChanged();
+            }
+            else {
+                System.err.println("ViewManagerModel is not set! Cannot navigate to MesssageView.");
+            }
+
+        });
         // Action listener for Report Account button
         reportAccountButton.addActionListener(evt -> {
             if (viewManagerModel != null) {

@@ -30,6 +30,10 @@ import interface_adapter.logout.LogoutPresenter;
 import interface_adapter.people.PeopleController;
 import interface_adapter.people.PeoplePresenter;
 import interface_adapter.people.PeopleViewModel;
+import interface_adapter.premessage.PreMessageController;
+import interface_adapter.premessage.PreMessagePresenter;
+import interface_adapter.premessage.PreMessageState;
+import interface_adapter.premessage.PreMessageViewModel;
 import interface_adapter.report_account.ReportAccountController;
 import interface_adapter.report_account.ReportAccountPresenter;
 import interface_adapter.report_account.ReportAccountState;
@@ -59,6 +63,10 @@ import use_case.logout.LogoutOutputBoundary;
 import use_case.people.PeopleInputBoundary;
 import use_case.people.PeopleInteractor;
 import use_case.people.PeopleOutputBoundary;
+import use_case.premessage.PreMessageInputBoundary;
+import use_case.premessage.PreMessageInteractor;
+import use_case.premessage.PreMessageOutputBoundary;
+import use_case.premessage.PreMessageUserDataAccessInterface;
 import use_case.report_account.ReportAccountInteractor;
 import use_case.report_account.ReportAccountUserDataAccessInterface;
 import use_case.signup.SignupInputBoundary;
@@ -106,6 +114,10 @@ public class AppBuilder {
     private LikeViewModel likeViewModel;
     private PeopleViewModel peopleViewModel;
     private PeopleView peopleView;
+    private MessageView messageView;
+    private PreMessageViewModel preMessageViewModel;
+    private PreMessageView preMessageView;
+
 
 
     public AppBuilder() {
@@ -150,6 +162,28 @@ public class AppBuilder {
         cardPanel.add(loggedInView, loggedInView.getViewName());
         return this;
     }
+
+//    public AppBuilder addMessageView(){
+//        messageViewModel = new MessageViewModel();
+//        messageView = new MessageView(messageViewModel);
+//
+//        // Set the ViewManagerModel for navigation
+//        MessageView.setViewManagerModel(viewManagerModel);
+//
+//        cardPanel.add(messageView, messageView.getViewName());
+//        return this;
+//    }
+
+    public AppBuilder addPreMessageView() {
+        PreMessageState state = new PreMessageState();
+        preMessageViewModel = new PreMessageViewModel();
+        preMessageView= new PreMessageView(preMessageViewModel);
+
+        // Add PreMessageView to the CardLayout
+        cardPanel.add(preMessageView, preMessageView.getViewName());
+        return this;
+    }
+
 
     public AppBuilder addEditProfileView() {
         EditProfileState state = new EditProfileState();
@@ -289,6 +323,7 @@ public class AppBuilder {
         return this;
     }
 
+
     /**
      * Adds the Login Use Case to the application.
      * @return this builder
@@ -375,6 +410,17 @@ public class AppBuilder {
         peopleView.setPeopleController(peopleController);
         return this;
     }
+    public AppBuilder addPreMessageUseCase() {
+        final PreMessageOutputBoundary preMessageOutputBoundary = new PreMessagePresenter(viewManagerModel, preMessageViewModel);
+
+        final PreMessageInputBoundary preMessageInteractor =
+                new PreMessageInteractor(firebaseDataAccessObject, preMessageOutputBoundary);
+
+        final PreMessageController preMessageController = new PreMessageController(preMessageInteractor);
+        preMessageView.setPreMessageController(preMessageController);
+        return this;
+    }
+
 
     /**
      * Creates the JFrame for the application and initially sets the SignupView to be displayed.

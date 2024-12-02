@@ -13,7 +13,8 @@ import data_access.UserConversationsRetriever;
 import entity.Message;
 import entity.MessageCallback;
 
-public class MessageView implements PropertyChangeListener {
+public class MessageView{
+    public final String viewName = "Message view";
     private JFrame frame;
     private JTextArea messageArea;
     private JTextField inputField;
@@ -22,9 +23,17 @@ public class MessageView implements PropertyChangeListener {
     String username2;
     UserConversationsRetriever retriever = new UserConversationsRetriever();
 
-    public MessageView(String title, String username1, String username2) {
-        frame = new JFrame(title + "" + "between" + username1 + "and " + username2);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    public MessageView(String username1, String username2) {
+        FirebaseInit.initializeFirebase();
+        UserConversationsRetriever.printMessagesBetweenUsers(username1, username2, new MessageCallback() {
+
+            @Override
+            public void update(List<Message> messages) {
+                updateMessages(messages);
+            }
+        });
+        frame = new JFrame("Messages" + "between " + username1 + " and " + username2);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setSize(500, 600);
 
         messageArea = new JTextArea();
@@ -61,22 +70,14 @@ public class MessageView implements PropertyChangeListener {
         messageArea.setText(messagesBuilder.toString());
     }
 
-    /**
-     * This method gets called when a bound property is changed.
-     *
-     * @param evt A PropertyChangeEvent object describing the event source
-     *            and the property that has changed.
-     */
-    @Override
-    public void propertyChange(PropertyChangeEvent evt) {
 
-    }
+
 
     public static void main(String[] args) {
         String username1 = "daniel";
         String username2 = "pedro";
-        MessageView a = new MessageView("messages", username1, username2);
-        MessageView b = new MessageView("messages", username2, username1);
+        MessageView a = new MessageView(username1, username2);
+        MessageView b = new MessageView(username2, username1);
         FirebaseInit.initializeFirebase();
         UserConversationsRetriever.printMessagesBetweenUsers(username1, username2, new MessageCallback() {
 
