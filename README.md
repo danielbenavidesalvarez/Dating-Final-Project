@@ -60,13 +60,13 @@ Our database is an instance of Firebase/Firestore. It allows us to store various
 Our program will aim to work with the following use cases, each corresponding to a different user story, and each proposed by one member of the group.
 
 
-Use case 1:
+Use case 1 (Group Use Case):
 
-Lebron wants to have an account to log in securely, and log out easily to ensure his data remains private and secure..
+Lebron wants to have an account to log in securely, and log out easily to ensure his data remains private and secure.
 
 Use case 2:
 
-Jordan wants to be able to change her interests, name, etc. As many times as she’d like.
+Jordan wants to be able to change her interests, name, etc. As many times as she’d like
 
 Use case 3:
 
@@ -74,15 +74,21 @@ Jing wants to be able to report a user who sent her inappropriate content. She i
 
 Use case 4:
 
-John has taken a look at all  of the users in the People View, He now wishes to like a profile and hope for a match.
+John has taken a look at all  of the users, He now wishes to like a profile and hope for a match.
 
 Use Case 5:
 
-Rahul wants to have an account to log in securely, and log out easily to ensure his data remains private and secure..
+Rahul wants to see whos on the app and what their interests are. Rahul will use the people view on PIKA to do this.
 
 Use Case 6:
 
-Radin wants to have an account to log in securely, and log out easily to ensure his data remains private and secure..
+After exploring his relationship goals, Tony wants to view his analytics including likes, matches and interests
+
+Use Case 7:
+Ashmann liked a user and matched. Now, he wants to message them to get to know them better. He can only message if he has matched with a user.
+They can chat in real-time and arrange a meeting.
+
+
 
 
 
