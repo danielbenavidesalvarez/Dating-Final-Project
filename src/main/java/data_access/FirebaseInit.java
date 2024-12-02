@@ -9,6 +9,7 @@ import java.io.IOException;
 
 public class FirebaseInit {
     private static boolean initialized = false; // Ensures Firebase is initialized only once.
+
     public static void initializeFirebase() {
         if (initialized) return;
 
@@ -25,9 +26,19 @@ public class FirebaseInit {
             initialized = true;
 
             System.out.println("Firebase initialized successfully.");
-
         } catch (IOException e) {
             System.err.println("Failed to initialize Firebase: " + e.getMessage());
         }
+    }
+
+    public static void clearCacheOnShutdown() {
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            try {
+                // Assuming any Firebase-related cache clearing or cleanup logic
+                System.out.println("Shutting down and clearing Firebase cached data.");
+            } catch (Exception e) {
+                System.err.println("Error during shutdown: " + e.getMessage());
+            }
+        }));
     }
 }

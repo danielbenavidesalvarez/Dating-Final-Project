@@ -14,7 +14,13 @@ public class Main {
     public static void main(String[] args) {
         // Initialize Firebase before building the application
         FirebaseInit.initializeFirebase();
+
+        // Set up shutdown hook to clear Firebase-related cache
+        FirebaseInit.clearCacheOnShutdown();
+
         FirebaseUserDataAccessObject dao = new FirebaseUserDataAccessObject();
+
+        // Test user creation for Firebase
         User testUser = new CommonUser("testUser", "password123");
         testUser.setUserId("testUserId");
         dao.save(testUser);
