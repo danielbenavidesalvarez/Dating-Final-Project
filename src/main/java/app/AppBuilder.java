@@ -406,7 +406,7 @@ public class AppBuilder {
         final PeopleOutputBoundary peopleOutputBoundary = new PeoplePresenter(peopleViewModel);
 
         final PeopleInputBoundary peopleInteractor =
-                new PeopleInteractor(peopleOutputBoundary, userDataAccessObject);
+                new PeopleInteractor(peopleOutputBoundary, firebaseDataAccessObject);
 
         final PeopleController peopleController = new PeopleController(peopleInteractor);
         peopleView.setPeopleController(peopleController);
