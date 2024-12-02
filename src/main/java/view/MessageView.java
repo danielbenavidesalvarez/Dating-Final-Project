@@ -23,7 +23,7 @@ public class MessageView implements PropertyChangeListener {
     UserConversationsRetriever retriever = new UserConversationsRetriever();
 
     public MessageView(String title, String username1, String username2) {
-        frame = new JFrame(title + "" + "between" + username1 + "and " + username2);
+        frame = new JFrame(title + " between " + username1 + " and " + username2);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(500, 600);
 
