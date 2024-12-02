@@ -2,6 +2,7 @@ package entity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * A concrete implementation of the User interface with added fields and methods.
@@ -14,6 +15,8 @@ public class CommonUser implements User {
     private String interests; // Comma-separated interests as a string
     private List<String> likedUsers = new ArrayList<>();
     private int likesReceivedCount;
+    private String gender;
+    private Map<String, List<MessageThread>> conversations;
 
     public CommonUser() {
         // Default constructor required for Firebase deserialization
@@ -101,5 +104,13 @@ public class CommonUser implements User {
 
     public boolean hasLiked(String userId) {
         return likedUsers.contains(userId);
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
     }
 }
