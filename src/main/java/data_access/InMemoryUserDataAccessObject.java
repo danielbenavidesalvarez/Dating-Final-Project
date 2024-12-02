@@ -8,11 +8,14 @@ import use_case.edit_profile.UserDataAccessInterface;
 import use_case.like.LikeUserDataAccessInterface;
 import use_case.login.LoginUserDataAccessInterface;
 import use_case.logout.LogoutUserDataAccessInterface;
+import use_case.people.PeopleUserDataAccessInterface;
 import use_case.report_account.ReportAccountUserDataAccessInterface;
 import use_case.signup.SignupUserDataAccessInterface;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.List;
 
 /**
  * In-memory implementation of the DAO for storing user data. This implementation does
@@ -25,7 +28,8 @@ public class InMemoryUserDataAccessObject implements SignupUserDataAccessInterfa
         UserDataAccessInterface, // Add implementation for Edit Profile
         LikeUserDataAccessInterface,
         AnalyticsUserDataAccessInterface,
-        ReportAccountUserDataAccessInterface{
+        ReportAccountUserDataAccessInterface,
+        PeopleUserDataAccessInterface {
 
 
     private final Map<String, User> users = new HashMap<>();
@@ -127,4 +131,7 @@ public class InMemoryUserDataAccessObject implements SignupUserDataAccessInterfa
         // Check if the user exists in the in-memory storage
         return users.containsKey(userId);
     }
+
+    @Override
+    public List<User> getUsers() {return new ArrayList<>(users.values());}
 }

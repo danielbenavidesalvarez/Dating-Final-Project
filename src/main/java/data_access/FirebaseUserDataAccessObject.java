@@ -9,9 +9,12 @@ import use_case.edit_profile.UserDataAccessInterface;
 import use_case.like.LikeUserDataAccessInterface;
 import use_case.login.LoginUserDataAccessInterface;
 import use_case.logout.LogoutUserDataAccessInterface;
+import use_case.people.PeopleUserDataAccessInterface;
 import use_case.report_account.ReportAccountUserDataAccessInterface;
 import use_case.signup.SignupUserDataAccessInterface;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -24,7 +27,8 @@ public class FirebaseUserDataAccessObject implements SignupUserDataAccessInterfa
         UserDataAccessInterface,
         LikeUserDataAccessInterface,
         AnalyticsUserDataAccessInterface,
-        ReportAccountUserDataAccessInterface {
+        ReportAccountUserDataAccessInterface,
+        PeopleUserDataAccessInterface {
 
     private final DatabaseReference userRef;
 
@@ -172,4 +176,7 @@ public class FirebaseUserDataAccessObject implements SignupUserDataAccessInterfa
     public boolean doesUserExist(String userId) {
         return existsByName(userId);
     }
+
+    public List<User> getUsers() {return new ArrayList<>(users.values());}
+}
 }
