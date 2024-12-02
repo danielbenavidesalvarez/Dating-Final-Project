@@ -133,5 +133,10 @@ public class InMemoryUserDataAccessObject implements SignupUserDataAccessInterfa
     }
 
     @Override
+    public boolean saveReport(String reportedUserId, String issueType, String description) {
+        return false;
+    }
+
+    @Override
     public List<User> getUsers() {return new ArrayList<>(users.values());}
 }

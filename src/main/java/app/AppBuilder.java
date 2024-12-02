@@ -1,7 +1,6 @@
 package app;
 
 import data_access.FirebaseUserDataAccessObject;
-import data_access.InMemoryReportAccountRepository;
 import data_access.InMemoryUserDataAccessObject;
 import data_access.ReportAccountRepository;
 import entity.CommonUserFactory;
@@ -265,24 +264,27 @@ public class AppBuilder {
         return this;
     }
 
+
     private static @NotNull ReportAccountInteractor getReportAccountInteractor(ReportAccountViewModel reportAccountViewModel) {
         ReportAccountState reportAccountState = new ReportAccountState();
 
         // Create Presenter
         ReportAccountPresenter reportAccountPresenter = new ReportAccountPresenter(reportAccountViewModel);
 
-        // Create Repository and Data Access
-        ReportAccountRepository reportAccountRepository = new InMemoryReportAccountRepository();
+        // Use FirebaseUserDataAccessObject for both user data and report storage
         ReportAccountUserDataAccessInterface reportAccountUserDataAccess = new FirebaseUserDataAccessObject();
+        FirebaseUserDataAccessObject firebaseDataAccess = new FirebaseUserDataAccessObject();
 
-        // Create Interactor
+        // Create Interactor with FirebaseUserDataAccessObject for reports
         ReportAccountInteractor reportAccountInteractor = new ReportAccountInteractor(
                 reportAccountPresenter,
-                reportAccountRepository,
+                firebaseDataAccess, // Use Firebase DAO
                 reportAccountUserDataAccess
         );
+
         return reportAccountInteractor;
     }
+
 
     public AppBuilder addAnalyticsUseCase() {
         // All components have already been initialized in addAnalyticsView, nothing additional to set up here.

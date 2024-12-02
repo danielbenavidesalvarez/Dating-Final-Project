@@ -1,19 +1,20 @@
 package use_case.report_account;
 
+import data_access.FirebaseUserDataAccessObject;
 import data_access.ReportAccountRepository;
 
 public class ReportAccountInteractor implements ReportAccountInputBoundary {
     private final ReportAccountOutputBoundary outputBoundary;
-    private final ReportAccountRepository repository;
+    private final FirebaseUserDataAccessObject firebaseDataAccess; // Replace with FirebaseUserDataAccessObject
     private final ReportAccountUserDataAccessInterface userDataAccess;
 
     public ReportAccountInteractor(
             ReportAccountOutputBoundary outputBoundary,
-            ReportAccountRepository repository,
+            FirebaseUserDataAccessObject firebaseDataAccess, // Use Firebase DAO
             ReportAccountUserDataAccessInterface userDataAccess) {
         this.outputBoundary = outputBoundary;
-        this.repository = repository;
-        this.userDataAccess = userDataAccess; // Correctly initializing userDataAccess
+        this.firebaseDataAccess = firebaseDataAccess;
+        this.userDataAccess = userDataAccess;
     }
 
     @Override
@@ -40,10 +41,9 @@ public class ReportAccountInteractor implements ReportAccountInputBoundary {
             return;
         }
 
-        // Save the report to the repository
-        boolean success = repository.saveReport(reportedUserId, issueType, description);
+        // Save report using Firebase
+        boolean success = firebaseDataAccess.saveReport(reportedUserId, issueType, description);
 
-        // Respond based on the save operation's success
         if (success) {
             outputBoundary.presentReportResult(new ReportAccountOutputData(true, "Report submitted successfully."));
         } else {
