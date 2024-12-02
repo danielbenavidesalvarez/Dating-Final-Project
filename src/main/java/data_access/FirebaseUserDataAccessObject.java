@@ -177,6 +177,40 @@ public class FirebaseUserDataAccessObject implements SignupUserDataAccessInterfa
         return existsByName(userId);
     }
 
-    public List<User> getUsers() {return new ArrayList<>(users.values());}
+//    public List<User> getUsers() {return new ArrayList<>(users.values());}
+
+    @Override
+    public List<User> getUsers() {
+        CompletableFuture<List<User>> future = new CompletableFuture<>();
+
+        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                List<User> userList = new ArrayList<>();
+                for (DataSnapshot childSnapshot : snapshot.getChildren()) {
+                    CommonUser user = childSnapshot.getValue(CommonUser.class);
+                    if (user != null) {
+                        user.setUserId(childSnapshot.getKey());
+                        userList.add(user);
+                    }
+                }
+                future.complete(userList);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                System.err.println("Error fetching users: " + error.getMessage());
+                future.completeExceptionally(error.toException());
+            }
+        });
+
+        try {
+            return future.get(); // Block and retrieve the result
+        } catch (Exception e) {
+            System.err.println("Error: " + e.getMessage());
+            return new ArrayList<>(); // Return an empty list in case of error
+        }
+    }
+
 }
-}
+
