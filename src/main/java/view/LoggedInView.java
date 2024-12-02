@@ -1,17 +1,22 @@
 package view;
 
-import interface_adapter.ViewManagerModel;
+import java.awt.*;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+
 import interface_adapter.change_password.ChangePasswordController;
 import interface_adapter.change_password.LoggedInState;
 import interface_adapter.change_password.LoggedInViewModel;
 import interface_adapter.logout.LogoutController;
-
-import javax.swing.*;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import java.awt.*;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
+import interface_adapter.ViewManagerModel;
 
 /**
  * The View for when the user is logged into the program.
@@ -30,9 +35,9 @@ public class LoggedInView extends JPanel implements PropertyChangeListener {
     private final JTextField passwordInputField = new JTextField(15);
     private final JButton changePassword;
     private final JButton editProfileButton;
-    private final JButton likeButton;
     private final JButton analyticsButton;
     private final JButton reportAccountButton;
+    private final JButton peopleButton;
 
     public LoggedInView(LoggedInViewModel loggedInViewModel) {
         this.loggedInViewModel = loggedInViewModel;
@@ -61,14 +66,15 @@ public class LoggedInView extends JPanel implements PropertyChangeListener {
         editProfileButton = new JButton("Edit Profile"); // Initialize Edit Profile button
         buttons.add(editProfileButton);
 
-        likeButton = new JButton("Likes"); // Initialize the Like button
-        buttons.add(likeButton);
-
         analyticsButton = new JButton("Analytics");
         buttons.add(analyticsButton);
 
         reportAccountButton = new JButton("Report Account");
         buttons.add(reportAccountButton); // Add button to the layout
+
+        peopleButton = new JButton("People");
+        buttons.add(peopleButton); // Add button to the layout
+
 
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
@@ -127,15 +133,15 @@ public class LoggedInView extends JPanel implements PropertyChangeListener {
                     }
                 }
         );
-        // Action listener for Like button
-        likeButton.addActionListener(
+
+        peopleButton.addActionListener(
                 evt -> {
                     if (viewManagerModel != null) {
-                        viewManagerModel.setState("like view"); // Navigate to Like View
+                        viewManagerModel.setState("people view"); // Navigate to Like View
                         viewManagerModel.firePropertyChanged();
                     }
                     else {
-                        System.err.println("ViewManagerModel is not set! Cannot navigate to LikeView.");
+                        System.err.println("ViewManagerModel is not set! Cannot navigate to People View.");
                     }
                 }
         );
@@ -197,3 +203,4 @@ public class LoggedInView extends JPanel implements PropertyChangeListener {
         this.viewManagerModel = viewManagerModel; // Set ViewManagerModel for navigation
     }
 }
+
